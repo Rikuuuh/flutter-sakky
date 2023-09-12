@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 // import 'package:second_app/styled_text.dart';
+import 'package:second_app/dice_roller.dart';
 
 Alignment startAlignment = Alignment.topLeft;
 
@@ -34,10 +35,13 @@ class GradientContainer extends StatelessWidget {
   // Kytketään propertiesit this. sanalla saman nimiseen muuttujaan
   const GradientContainer({super.key, required this.colors});
 
+  // Harjoitus: muokkaa GradientContainer ottamaan vastaan kaksi väriä
   // Nimetty constructor
   GradientContainer.deepPurple({
     super.key,
   }) : colors = [Colors.deepPurple, const Color.fromARGB(255, 58, 19, 125)];
+
+  // Properties (fields)
   final List<Color> colors;
 
   //{ const consructorilla ei voi olla body osaa
@@ -54,11 +58,13 @@ class GradientContainer extends StatelessWidget {
         gradient: LinearGradient(
             colors: colors, begin: startAlignment, end: endAlignment),
       ),
-      child: Center(
-        child: Image.asset('assets/images/d1.png', width: 200, height: 200),
+      child: const Center(
+        child: DiceRoller(),
       ),
     );
   }
 }
 
-// Harjoitus: muokkaa GradientContainer ottamaan vastaan kaksi väriä
+
+// 1. Anonyymi funktio / anonymous function: () {}
+// 2. Nimetty funktio
