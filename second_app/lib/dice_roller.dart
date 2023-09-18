@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
 
+final random = Random();
+
 class DiceRoller extends StatefulWidget {
   const DiceRoller({super.key});
 
@@ -17,12 +19,11 @@ class _DiceRollerState extends State<DiceRoller> {
 
   //funktio
   void rollDice() {
-    // Määritetään anonyymi funktio
     setState(() {
       // Täällä muokatut luokkamuuttujat, aiheuttavat käyttöliittymän päivityksen
       // Tai ainoastaan tämän luokan päivitksen, joka tarkoittaa build-funktion
       // suorittamista uudelleen.
-      currentDiceRoll = Random().nextInt(6) + 1;
+      currentDiceRoll = random.nextInt(6) + 1;
     });
   }
 
@@ -33,7 +34,8 @@ class _DiceRollerState extends State<DiceRoller> {
       children: [
         Image.asset(
           'assets/images/d$currentDiceRoll.png',
-          width: 200,
+          width: 100,
+          height: 100,
         ),
         const SizedBox(
           height: 20,
