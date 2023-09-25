@@ -35,7 +35,7 @@ class _HsScreenState extends State<HsScreen> {
           Image.asset(
             'assets/images/hese.jpg',
             width: 200,
-            height: 200,
+            height: 180,
           ),
           const SizedBox(
             height: 50,

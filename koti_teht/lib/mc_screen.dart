@@ -35,7 +35,7 @@ class _McState extends State<McScreen> {
           Image.asset(
             'assets/images/mc.jpg',
             width: 200,
-            height: 200,
+            height: 180,
           ),
           const SizedBox(
             height: 50,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-// import 'package:moni_valinta/data/questions.dart';
+import 'package:moni_valinta/data/questions.dart';
 import 'package:moni_valinta/answer_button.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class QuestionScreen extends StatefulWidget {
   const QuestionScreen({super.key});
@@ -12,32 +13,53 @@ class QuestionScreen extends StatefulWidget {
 }
 
 class _QuestionScreenState extends State<QuestionScreen> {
+  var currentQuestionIndex = 0;
+
+  void answerQuestion() {
+    // currentQuestionIndex = currentQuestionIndex + 1;
+    // currentQuestionIndex += 1;
+    setState(() {
+      currentQuestionIndex++;
+    });
+  }
+
   @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            'Question',
-            style: TextStyle(
-              fontSize: 30,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
+  Widget build(context) {
+    final currentQuestion = questions[currentQuestionIndex];
+    return Center(
+      child: Container(
+        margin: const EdgeInsets.fromLTRB(25, 0, 25, 0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              currentQuestion.text,
+              style: GoogleFonts.sansita(fontSize: 20),
+              textAlign: TextAlign.center,
+              // Stylen ulkopuolelle jos ei mee keskelle!
             ),
-          ),
-          SizedBox(
-            height: 50,
-          ),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              AnswerButton(
-                answerText: 'vastaasdasd',
-              )
-            ],
-          ),
-        ],
+            const SizedBox(
+              height: 40,
+            ),
+            // Map funktio käy läpi datan listassa, suorittaa funktion jokaista
+            // listan itemiä kohden ja tallentaa uuden datan, uuteen listaan.
+            // Uusi lista ei näy koodissa, se vain ilmestyy tähän kohtaan, jossa
+            // suoritetaan map() funktio
+
+            // Spread operaatio käyttämällä ... map- funktion kanssa
+            ...currentQuestion.getShuffledAnswers().map(
+              (item) {
+                return AnswerButton(answerText: item, onTap: answerQuestion);
+              },
+            ),
+
+            //AnswerButton(answerText: currentQuestion.answers[0], onTap: () {}),
+            //AnswerButton(answerText: currentQuestion.answers[1], onTap: () {}),
+            //AnswerButton(answerText: currentQuestion.answers[2], onTap: () {}),
+            //AnswerButton(answerText: currentQuestion.answers[3], onTap: () {}),
+          ],
+        ),
       ),
     );
   }

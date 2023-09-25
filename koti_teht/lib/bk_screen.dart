@@ -35,7 +35,7 @@ class _BkScreenState extends State<BkScreen> {
           Image.asset(
             'assets/images/bk.jpg',
             width: 200,
-            height: 200,
+            height: 180,
           ),
           const SizedBox(
             height: 50,
