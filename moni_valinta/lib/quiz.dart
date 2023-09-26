@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:moni_valinta/question_screen.dart';
+import 'package:moni_valinta/data/questions.dart';
 import 'package:moni_valinta/start_screen.dart';
+import 'package:moni_valinta/results_screen.dart';
 
 class Quiz extends StatefulWidget {
   const Quiz({super.key});
@@ -28,6 +30,7 @@ class _QuizState extends State<Quiz> {
 
   // - Versio 2 -
 
+  final List<String> selectedAnswers = []; // State
   var activeScreen = 'start-screen'; // Ei tarvitse null arvoa
 
   // Funktio
@@ -39,6 +42,17 @@ class _QuizState extends State<Quiz> {
         activeScreen = 'question-screen';
       },
     );
+  }
+
+  void chooseAnswer(String answer) {
+    selectedAnswers.add(answer);
+
+    if (selectedAnswers.length == questions.length) {
+      setState(() {
+        selectedAnswers.clear();
+        activeScreen = 'result-screen';
+      });
+    }
   }
 
   // Ensin tallennettiin koko widgetti muuttujaan (pointer objektiin)
@@ -54,7 +68,9 @@ class _QuizState extends State<Quiz> {
     Widget screenWidget = StartScreen(switchScreen);
 
     if (activeScreen == 'question-screen') {
-      screenWidget = const QuestionScreen();
+      screenWidget = QuestionScreen(onSelectAnswer: chooseAnswer);
+    } else if (activeScreen == 'result-screen') {
+      screenWidget = ResultsScreen(chosenAnswers: selectedAnswers);
     }
 
     return MaterialApp(

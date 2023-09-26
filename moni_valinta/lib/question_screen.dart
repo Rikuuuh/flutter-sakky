@@ -4,7 +4,9 @@ import 'package:moni_valinta/answer_button.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class QuestionScreen extends StatefulWidget {
-  const QuestionScreen({super.key});
+  const QuestionScreen({super.key, required this.onSelectAnswer});
+
+  final void Function(String answer) onSelectAnswer;
 
   @override
   State<QuestionScreen> createState() {
@@ -15,10 +17,11 @@ class QuestionScreen extends StatefulWidget {
 class _QuestionScreenState extends State<QuestionScreen> {
   var currentQuestionIndex = 0;
 
-  void answerQuestion() {
-    // currentQuestionIndex = currentQuestionIndex + 1;
-    // currentQuestionIndex += 1;
+  void answerQuestion(String selectedAnswer) {
+    widget.onSelectAnswer(selectedAnswer);
     setState(() {
+      // currentQuestionIndex = currentQuestionIndex + 1;
+      // currentQuestionIndex += 1;
       currentQuestionIndex++;
     });
   }
@@ -50,7 +53,12 @@ class _QuestionScreenState extends State<QuestionScreen> {
             // Spread operaatio käyttämällä ... map- funktion kanssa
             ...currentQuestion.getShuffledAnswers().map(
               (item) {
-                return AnswerButton(answerText: item, onTap: answerQuestion);
+                return AnswerButton(
+                  answerText: item,
+                  onTap: () {
+                    answerQuestion(item);
+                  },
+                );
               },
             ),
 
