@@ -20,7 +20,7 @@ class StartScreen extends StatelessWidget {
           const SizedBox(height: 40),
           Text(
             'Start Screen',
-            style: GoogleFonts.sansita(
+            style: GoogleFonts.saira(
               fontSize: 30,
               fontWeight: FontWeight.bold,
               color: Colors.white,
@@ -37,7 +37,7 @@ class StartScreen extends StatelessWidget {
             icon: const Icon(Icons.arrow_right_alt_sharp),
             label: Text(
               'Start Quiz',
-              style: GoogleFonts.sansita(
+              style: GoogleFonts.saira(
                 fontSize: 17.5,
               ),
             ),

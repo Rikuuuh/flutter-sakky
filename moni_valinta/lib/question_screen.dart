@@ -38,7 +38,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
           children: [
             Text(
               currentQuestion.text,
-              style: GoogleFonts.sansita(fontSize: 20),
+              style: GoogleFonts.saira(fontSize: 20),
               textAlign: TextAlign.center,
               // Stylen ulkopuolelle jos ei mee keskelle!
             ),

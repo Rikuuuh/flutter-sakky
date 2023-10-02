@@ -27,7 +27,7 @@ class AnswerButton extends StatelessWidget {
         ),
         child: Text(
           answerText,
-          style: GoogleFonts.sansita(
+          style: GoogleFonts.saira(
             fontSize: 17,
             fontWeight: FontWeight.bold,
           ),
