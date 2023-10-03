@@ -49,10 +49,16 @@ class _QuizState extends State<Quiz> {
 
     if (selectedAnswers.length == questions.length) {
       setState(() {
-        // selectedAnswers.clear();
         activeScreen = 'result-screen';
       });
     }
+  }
+
+  void restartQuiz() {
+    setState(() {
+      selectedAnswers.clear();
+      activeScreen = 'question-screen';
+    });
   }
 
   // Ensin tallennettiin koko widgetti muuttujaan (pointer objektiin)
@@ -70,7 +76,10 @@ class _QuizState extends State<Quiz> {
     if (activeScreen == 'question-screen') {
       screenWidget = QuestionScreen(onSelectAnswer: chooseAnswer);
     } else if (activeScreen == 'result-screen') {
-      screenWidget = ResultsScreen(chosenAnswers: selectedAnswers);
+      screenWidget = ResultsScreen(
+        chosenAnswers: selectedAnswers,
+        onRestart: restartQuiz,
+      );
     }
 
     return MaterialApp(

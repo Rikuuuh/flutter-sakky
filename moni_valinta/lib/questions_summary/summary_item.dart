@@ -36,17 +36,29 @@ class SummaryItem extends StatelessWidget {
                 itemData['question'] as String,
                 style: GoogleFonts.saira(
                   color: Colors.black,
-                  fontSize: 17,
+                  fontSize: 15,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               const SizedBox(
                 height: 5,
               ),
+              if (isCorrectAnswer)
+                const Icon(
+                  Icons.thumb_up_alt_sharp,
+                  color: Colors.greenAccent,
+                  size: 14,
+                )
+              else
+                const Icon(
+                  Icons.thumb_down_alt_sharp,
+                  color: Colors.redAccent,
+                  size: 14,
+                ),
               Text(
                 itemData['user_answer'] as String,
                 style: GoogleFonts.saira(
-                  fontSize: 15,
+                  fontSize: 14,
                   color: isCorrectAnswer ? rightColor : wrongColor,
                   fontWeight: FontWeight.bold,
                 ),
@@ -57,26 +69,15 @@ class SummaryItem extends StatelessWidget {
                     child: Text(
                       itemData['user_answer'] as String,
                       style: GoogleFonts.saira(
-                        fontSize: 15,
+                        fontSize: 14,
                         color: isCorrectAnswer ? rightColor : wrongColor,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
-                  const Padding(padding: EdgeInsets.fromLTRB(0, 10, 5, 10)),
-                  const SizedBox(
-                    width: 5,
+                  const Padding(
+                    padding: EdgeInsets.fromLTRB(5, 5, 0, 5),
                   ),
-                  if (isCorrectAnswer)
-                    const Icon(
-                      Icons.thumb_up_alt_sharp,
-                      color: Colors.greenAccent,
-                    )
-                  else
-                    const Icon(
-                      Icons.thumb_down_alt_sharp,
-                      color: Colors.redAccent,
-                    ),
                 ],
               ),
               const SizedBox(
