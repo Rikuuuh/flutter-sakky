@@ -13,6 +13,9 @@ class Quiz extends StatefulWidget {
   }
 }
 
+// Private luokka eli voi käyttää vain tässä tiedostossa
+// Toimii myös properteissa ja metodeissa
+// Julkisella luokalla voi olla yksityisiä osia
 class _QuizState extends State<Quiz> {
   // Määritellään muuttujan datatyypiksi ! WIDGET !,
   // koska molemmat luokat perivät sen

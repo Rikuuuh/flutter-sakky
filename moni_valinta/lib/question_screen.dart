@@ -54,7 +54,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
             // suoritetaan map() funktio
 
             // Spread operaatio käyttämällä ... map- funktion kanssa
-            ...currentQuestion.getShuffledAnswers().map(
+            ...currentQuestion.shuffledAnswers.map(
               (item) {
                 return AnswerButton(
                   answerText: item,

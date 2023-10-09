@@ -36,6 +36,7 @@ class SelectIngredients extends StatelessWidget {
           final numberOfPortions = mapOfOneSelectedIngredient[item];
 
           return Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               TextButton(
                 onPressed: () {

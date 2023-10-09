@@ -12,7 +12,9 @@ class ResultsScreen extends StatelessWidget {
 
   // Map on datarakenne, jossa voidaan määritellä key: value pareja
   // Esim ikä(key): 33(value)
-  List<Map<String, Object>> getSummaryData() {
+
+  // List<Map<String, Object>> getSummaryData() {
+  List<Map<String, Object>> get summaryData {
     final List<Map<String, Object>> summary = []; // Luodaan lista
 
     // Generoidaan data...
@@ -34,17 +36,18 @@ class ResultsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     // Luodaan muuttujat, jossa on kaikkien kysymyksien lukumäärä ja
     // oikeiden vastauksien lukumäärä.
-    final summaryData = getSummaryData();
+
     final numTotalQuestions = questions.length;
-    final numCorrectQuestions = summaryData.where(
-      (elementData) {
-        // Where funktion sisällä pitää suorittaa funktio joka palauttaa
-        // true tai false. true säilyttää datan ja false hylkää datan.
-        // Where suodattaa alkuperäisen listan dataa ja palauttaa uuden
-        // suodatetun listan.
-        return elementData['user_answer'] == elementData['correct_answer'];
-      },
-    ).length;
+    final numCorrectQuestions = summaryData
+        .where(
+          (elementData) =>
+              elementData['user_answer'] == elementData['correct_answer'],
+          // Where funktion sisällä pitää suorittaa funktio joka palauttaa
+          // true tai false. true säilyttää datan ja false hylkää datan.
+          // Where suodattaa alkuperäisen listan dataa ja palauttaa uuden
+          // suodatetun listan.
+        )
+        .length;
 
     return SizedBox(
       width: double.infinity,

@@ -31,8 +31,8 @@ class _PizzaBuilderState extends State<PizzaBuilder> {
         body: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(colors: [
-              Color.fromARGB(180, 0, 138, 129),
-              Color.fromARGB(210, 0, 0, 0),
+              Color.fromARGB(76, 137, 255, 3),
+              Color.fromARGB(255, 0, 0, 0),
             ], begin: Alignment.bottomCenter, end: Alignment.topCenter),
           ),
           child: SelectIngredients(selectedIngredients,
