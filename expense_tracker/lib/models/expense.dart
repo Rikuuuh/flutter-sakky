@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 import 'package:intl/intl.dart';
 
-final formatter = DateFormat.yMd();
+final formatter = DateFormat.yMMMMd();
 
 const uuid = Uuid();
 
 // Compile time data
-enum Category { food, travel, leisure, work }
+enum Category { food, travel, theater, work }
 
 const categoryIcons = {
   Category.food: Icons.food_bank,
   Category.travel: Icons.flight_outlined,
-  Category.leisure: Icons.theaters_outlined,
+  Category.theater: Icons.theaters_outlined,
   Category.work: Icons.work_history_outlined,
 };
 
