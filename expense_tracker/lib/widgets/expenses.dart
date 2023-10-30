@@ -14,45 +14,35 @@ class Expenses extends StatefulWidget {
 
 class _ExpensesState extends State<Expenses> {
   // Lista käyttäjän ostoksista
-  final List<Expense> _registeredExpenses = [
-    Expense(
-        title: 'Jauheliha 200g',
-        amount: 2.99,
-        date: DateTime.now(),
-        category: Category.food),
-    Expense(
-        title: 'Theater',
-        amount: 19.99,
-        date: DateTime.now(),
-        category: Category.leisure),
-    Expense(
-        title: 'Travel',
-        amount: 499.99,
-        date: DateTime.now(),
-        category: Category.travel),
-    Expense(
-        title: 'Work',
-        amount: 49.99,
-        date: DateTime.now(),
-        category: Category.work),
-  ];
+  final List<Expense> _registeredExpenses = [];
 
   void _openAddExpenseOverlay() {
     showModalBottomSheet(
-        context: context, builder: (ctx) => const NewExpense());
+        isScrollControlled: true,
+        context: context,
+        builder: (ctx) => NewExpense(
+              onAddExpense: _addExpense,
+            ));
+  }
+
+  void _addExpense(Expense expense) {
+    setState(() {
+      _registeredExpenses.add(expense);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text(
-            'Flutter ExpenseTracker',
-          ),
+          backgroundColor: Colors.black,
+          title: const Text('Flutter ExpenseTracker',
+              style: TextStyle(color: Colors.greenAccent)),
           actions: [
             IconButton(
               onPressed: _openAddExpenseOverlay,
-              icon: const Icon(Icons.add_circle),
+              icon: const Icon(Icons.add_circle_outline,
+                  color: Colors.greenAccent),
             )
           ]),
       body: Column(

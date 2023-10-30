@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:expense_tracker/models/expense.dart';
 
 class NewExpense extends StatefulWidget {
-  const NewExpense({super.key});
+  const NewExpense({super.key, required this.onAddExpense});
+
+  final void Function(Expense expense) onAddExpense;
 
   @override
   State<NewExpense> createState() => _NewExpenseState();
@@ -17,15 +20,67 @@ class _NewExpenseState extends State<NewExpense> {
   final _titleController = TextEditingController();
   final _priceController = TextEditingController();
 
-  void _presentDatePicker() {
+  DateTime? // <--- ? = Voi olla null
+      _selectedDate; // Voi olla null, koodissa pitää varmistaa ettei sovellus kaadu
+
+  Category _selectedCategory = Category.theater;
+
+  void _presentDatePicker() async {
     final now = DateTime.now();
     final firstDate = DateTime(now.year - 1, now.month, now.day);
     final lastDate = DateTime(now.year, now.month + 1, now.day);
-    showDatePicker(
+    final pickedDate = await showDatePicker(
         context: context,
         initialDate: now,
         firstDate: firstDate,
-        lastDate: lastDate);
+        lastDate: lastDate); // .then((value) => null); // Yksi vaihtoehto
+    setState(() {
+      _selectedDate = pickedDate;
+    });
+  }
+
+  void _submitExpenseData() {
+    final double? enteredPrice = double.tryParse(_priceController.text);
+
+    // ==, >=, <: ovat vertailu operaatioita
+    // || ja && ovat loogisia operaatioita, joilla voi yhdistää useamman vertailun
+    final bool priceIsInvalid = enteredPrice == null || enteredPrice < 0;
+
+    // Tarkistetaan käyttäjän tallentama data
+    if (_titleController.text.trim().isEmpty ||
+        priceIsInvalid == true ||
+        _selectedDate == null) {
+      // Tarkistetaan virheet
+      // Näytetään virhe teksti
+      showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text('Invalid input'),
+          content:
+              const Text('Please make sure information is entered correctyl!'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(ctx);
+              },
+              child: const Text('Okay...'),
+            )
+          ],
+        ),
+      );
+      return;
+    }
+
+    // Luodaan uusi expense objekti
+    final temp = Expense(
+        title: _titleController.text,
+        amount: enteredPrice!,
+        date: _selectedDate!,
+        category: _selectedCategory);
+
+    // Lähetetään objekti funktion parametrinä
+    widget.onAddExpense(temp);
+    Navigator.pop(context);
   }
 
   @override
@@ -39,15 +94,20 @@ class _NewExpenseState extends State<NewExpense> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.fromLTRB(16, 50, 16, 16),
       child: Column(
         children: [
+          const Padding(padding: EdgeInsets.fromLTRB(10, 5, 10, 0)),
           TextField(
             controller: _titleController, // Linkitetään Textfield ja controller
             maxLength: 50,
             // keyboardType: TextInputType.text, = Oletus
             decoration: const InputDecoration(
-              label: Text('Title'),
+              label: Text(
+                'Title',
+                style:
+                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+              ),
             ),
           ),
           Row(
@@ -60,7 +120,11 @@ class _NewExpenseState extends State<NewExpense> {
                     prefixText: '€ ',
                     suffixText:
                         ' \$', // Escape syntaksi, koska $ osana dart kieltä
-                    label: Text('Price'),
+                    label: Text(
+                      'Price',
+                      style: TextStyle(
+                          color: Colors.black, fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ),
               ),
@@ -70,30 +134,60 @@ class _NewExpenseState extends State<NewExpense> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const Text('Selected Date'),
+                    // Ternary operaatio, yhden rivin if else
+                    Text(
+                      _selectedDate == null // Vertailu, true tai false
+                          ? 'Select Date' // ? tehdään true
+                          : formatter.format(_selectedDate!),
+                      style: TextStyle(
+                          color: Colors.greenAccent[700],
+                          fontWeight: FontWeight.bold),
+                    ), // : tehdään false
                     IconButton(
                       onPressed: _presentDatePicker,
-                      icon: const Icon(Icons.calendar_month_rounded),
+                      icon: Icon(Icons.edit_calendar_outlined,
+                          size: 28, color: Colors.greenAccent[700]),
                     )
                   ],
                 ),
               )
             ],
           ),
+          const SizedBox(height: 16),
           Row(
             children: [
+              DropdownButton(
+                value: _selectedCategory,
+                items: Category.values
+                    .map(
+                      (category) => DropdownMenuItem(
+                        value: category,
+                        child: Text(category.name.toUpperCase()),
+                      ),
+                    )
+                    .toList(),
+                onChanged: (value) {
+                  if (value == null) {
+                    return; // Lopettaa funktion suorituksen (onchanged)
+                  }
+                  setState(() {
+                    _selectedCategory = value;
+                  });
+                },
+              ),
+              const Spacer(),
               TextButton(
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: const Text('Cancel'),
+                child: const Text('Cancel',
+                    style: TextStyle(color: Colors.blueAccent)),
               ),
               ElevatedButton(
-                onPressed: () {
-                  print(_titleController.text);
-                  print(_priceController.text);
-                },
-                child: const Text('Save Expense'),
+                onPressed: _submitExpenseData,
+                child: const Text(
+                  'Save Expense',
+                ),
               )
             ],
           ),
