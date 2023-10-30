@@ -139,14 +139,13 @@ class _NewExpenseState extends State<NewExpense> {
                       _selectedDate == null // Vertailu, true tai false
                           ? 'Select Date' // ? tehdään true
                           : formatter.format(_selectedDate!),
-                      style: TextStyle(
-                          color: Colors.greenAccent[700],
-                          fontWeight: FontWeight.bold),
+                      style: const TextStyle(fontWeight: FontWeight.bold),
                     ), // : tehdään false
                     IconButton(
                       onPressed: _presentDatePicker,
-                      icon: Icon(Icons.edit_calendar_outlined,
-                          size: 28, color: Colors.greenAccent[700]),
+                      icon: const Icon(
+                        Icons.edit_calendar_outlined,
+                      ),
                     )
                   ],
                 ),

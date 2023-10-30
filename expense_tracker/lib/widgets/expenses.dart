@@ -14,7 +14,14 @@ class Expenses extends StatefulWidget {
 
 class _ExpensesState extends State<Expenses> {
   // Lista käyttäjän ostoksista
-  final List<Expense> _registeredExpenses = [];
+  final List<Expense> _registeredExpenses = [
+    Expense(
+      title: 'Jauheliha 200g',
+      amount: 2.99,
+      date: DateTime.now().subtract(const Duration(days: 1)),
+      category: Category.food,
+    )
+  ];
 
   void _openAddExpenseOverlay() {
     showModalBottomSheet(
@@ -31,8 +38,41 @@ class _ExpensesState extends State<Expenses> {
     });
   }
 
+  void _removeExpense(Expense expense) {
+    final expenseIndex = _registeredExpenses.indexOf(expense);
+    setState(() {
+      _registeredExpenses.remove(expense);
+    });
+    // Poiston peruutus
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        duration: const Duration(seconds: 5),
+        content: const Text('Expense deleted.'),
+        action: SnackBarAction(
+            label: 'Undo',
+            onPressed: () {
+              // Datan poiston peruutus
+              setState(() {
+                _registeredExpenses.insert(expenseIndex, expense);
+              });
+            }),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    Widget mainContent = const Center(
+      child: Text('No expenses found. Start adding some!'),
+    );
+
+    if (_registeredExpenses.isNotEmpty) {
+      mainContent = ExpensesList(
+        expenses: _registeredExpenses,
+        onRemoveExpense: _removeExpense,
+      );
+    }
     return Scaffold(
       appBar: AppBar(
           backgroundColor: Colors.black,
@@ -49,7 +89,7 @@ class _ExpensesState extends State<Expenses> {
         children: [
           const Text('Chart Goes Here'),
           Expanded(
-            child: ExpensesList(expenses: _registeredExpenses),
+            child: mainContent,
           ),
         ],
       ),
