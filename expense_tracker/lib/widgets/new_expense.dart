@@ -103,11 +103,7 @@ class _NewExpenseState extends State<NewExpense> {
             maxLength: 50,
             // keyboardType: TextInputType.text, = Oletus
             decoration: const InputDecoration(
-              label: Text(
-                'Title',
-                style:
-                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-              ),
+              label: Text('Title'),
             ),
           ),
           Row(
@@ -120,11 +116,7 @@ class _NewExpenseState extends State<NewExpense> {
                     prefixText: '€ ',
                     suffixText:
                         ' \$', // Escape syntaksi, koska $ osana dart kieltä
-                    label: Text(
-                      'Price',
-                      style: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.bold),
-                    ),
+                    label: Text('Price'),
                   ),
                 ),
               ),
@@ -139,13 +131,10 @@ class _NewExpenseState extends State<NewExpense> {
                       _selectedDate == null // Vertailu, true tai false
                           ? 'Select Date' // ? tehdään true
                           : formatter.format(_selectedDate!),
-                      style: const TextStyle(fontWeight: FontWeight.bold),
                     ), // : tehdään false
                     IconButton(
                       onPressed: _presentDatePicker,
-                      icon: const Icon(
-                        Icons.edit_calendar_outlined,
-                      ),
+                      icon: const Icon(Icons.edit_calendar_outlined),
                     )
                   ],
                 ),
@@ -179,14 +168,11 @@ class _NewExpenseState extends State<NewExpense> {
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: const Text('Cancel',
-                    style: TextStyle(color: Colors.blueAccent)),
+                child: const Text('Cancel'),
               ),
               ElevatedButton(
                 onPressed: _submitExpenseData,
-                child: const Text(
-                  'Save Expense',
-                ),
+                child: const Text('Save Expense'),
               )
             ],
           ),

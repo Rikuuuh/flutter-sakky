@@ -16,10 +16,16 @@ class _ExpensesState extends State<Expenses> {
   // Lista käyttäjän ostoksista
   final List<Expense> _registeredExpenses = [
     Expense(
-      title: 'Jauheliha 200g',
+      title: 'Food',
       amount: 2.99,
       date: DateTime.now().subtract(const Duration(days: 1)),
       category: Category.food,
+    ),
+    Expense(
+      title: 'Plane ticket',
+      amount: 500,
+      date: DateTime.now().subtract(const Duration(days: 1)),
+      category: Category.leisure,
     )
   ];
 
@@ -74,17 +80,12 @@ class _ExpensesState extends State<Expenses> {
       );
     }
     return Scaffold(
-      appBar: AppBar(
-          backgroundColor: Colors.black,
-          title: const Text('Flutter ExpenseTracker',
-              style: TextStyle(color: Colors.greenAccent)),
-          actions: [
-            IconButton(
-              onPressed: _openAddExpenseOverlay,
-              icon: const Icon(Icons.add_circle_outline,
-                  color: Colors.greenAccent),
-            )
-          ]),
+      appBar: AppBar(title: const Text('Flutter ExpenseTracker'), actions: [
+        IconButton(
+          onPressed: _openAddExpenseOverlay,
+          icon: const Icon(Icons.add_circle_outline),
+        )
+      ]),
       body: Column(
         children: [
           const Text('Chart Goes Here'),
