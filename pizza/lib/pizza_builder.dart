@@ -11,16 +11,47 @@ class PizzaBuilder extends StatefulWidget {
 
 class _PizzaBuilderState extends State<PizzaBuilder> {
   final List<Map<Ingredient, int>> selectedIngredients = [];
+  bool isMediumSelected = true;
+  int totalPrice = 1090;
 
   void incrementIngredient(Ingredient ingredient) {
     setState(() {
       final Map<Ingredient, int> ingredientMap = selectedIngredients
           .firstWhere((element) => element.containsKey(ingredient), orElse: () {
-        final newMap = {ingredient: 1};
+        final newMap = {ingredient: 0};
         selectedIngredients.add(newMap);
         return newMap;
       });
       ingredientMap[ingredient] = (ingredientMap[ingredient] ?? 0) + 1;
+    });
+  }
+
+  void removeIngredient(Ingredient ingredient) {
+    setState(() {
+      final Map<Ingredient, int> ingredientMap = selectedIngredients
+          .firstWhere((element) => element.containsKey(ingredient), orElse: () {
+        final newMap = {ingredient: 1};
+        selectedIngredients.remove(newMap);
+        return newMap;
+      });
+      ingredientMap[ingredient] = (ingredientMap[ingredient] ?? 0) - 1;
+    });
+  }
+
+  void calculateTotalPrice() {
+    int basePrice = isMediumSelected ? 1090 : 2090;
+    int ingredientsPrice = 0;
+    int calculatedTotalPrice = basePrice + ingredientsPrice;
+
+    setState(() {
+      totalPrice = calculatedTotalPrice;
+    });
+  }
+
+  void toggleSize(bool isMedium) {
+    setState(() {
+      isMediumSelected = isMedium;
+      calculateTotalPrice();
     });
   }
 
@@ -29,14 +60,15 @@ class _PizzaBuilderState extends State<PizzaBuilder> {
     return MaterialApp(
       home: Scaffold(
         body: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(colors: [
-              Color.fromARGB(76, 137, 255, 3),
-              Color.fromARGB(255, 0, 0, 0),
-            ], begin: Alignment.bottomCenter, end: Alignment.topCenter),
-          ),
-          child: SelectIngredients(selectedIngredients,
-              onAddIngredient: incrementIngredient),
+          decoration: const BoxDecoration(color: Colors.white),
+          child: SelectIngredients(
+              onSizeToggle: toggleSize,
+              selectedIngredients: selectedIngredients,
+              onAddIngredient: incrementIngredient,
+              onRemoveIngredient: removeIngredient,
+              isMediumSelected: isMediumSelected,
+              totalPrice: totalPrice,
+              onCalculateTotalPrice: calculateTotalPrice),
         ),
       ),
     );
