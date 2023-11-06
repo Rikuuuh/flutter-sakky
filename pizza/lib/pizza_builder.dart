@@ -40,8 +40,8 @@ class _PizzaBuilderState extends State<PizzaBuilder> {
 
   void calculateTotalPrice() {
     int basePrice = isMediumSelected ? 1090 : 2090;
-    int ingredientsPrice = 0;
-    int calculatedTotalPrice = basePrice + ingredientsPrice;
+    int ingredientsPriceSmall = 0;
+    int calculatedTotalPrice = basePrice + ingredientsPriceSmall;
 
     setState(() {
       totalPrice = calculatedTotalPrice;
