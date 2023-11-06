@@ -51,8 +51,8 @@ class _NewExpenseState extends State<NewExpense> {
         priceIsInvalid == true ||
         _selectedDate == null) {
       // Tarkistetaan virheet
-      // Näytetään virhe teksti
       showDialog(
+        // Näytetään virhe teksti käyttäjälle
         context: context,
         builder: (ctx) => AlertDialog(
           title: const Text('Invalid input'),
@@ -61,6 +61,7 @@ class _NewExpenseState extends State<NewExpense> {
           actions: [
             TextButton(
               onPressed: () {
+                // Mennään takaisin päin painamalla okay nappia
                 Navigator.pop(ctx);
               },
               child: const Text('Okay...'),

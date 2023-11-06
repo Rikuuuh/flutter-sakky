@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:expense_tracker/widgets/expenses.dart';
+// import 'package:flutter/services.dart';
+
+// Nopeampaa kuin tehdä jokaiselle yksittäinen tyylittely, helpompaa isossa
+// isossa projektissa. Jos haluat käyttää yksittäistä tyylittelyä lisäksi
+// niin sekin onnistuu
 
 var kColorScheme =
     ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 137, 64, 255));
@@ -9,6 +14,13 @@ var kDarkColorScheme = ColorScheme.fromSeed(
     seedColor: const Color.fromARGB(255, 5, 99, 125));
 
 void main() {
+  //WidgetsFlutterBinding.ensureInitialized();
+  //SystemChrome.setPreferredOrientations([
+  // DeviceOrientation.portraitDown,
+  //DeviceOrientation.portraitUp,
+  // DeviceOrientation.landscapeLeft,
+  //]).then(
+  //(fn) =>
   runApp(
     MaterialApp(
       darkTheme: ThemeData().copyWith(
@@ -79,4 +91,20 @@ void main() {
       home: const Expenses(),
     ),
   );
+  //);
 }
+
+// Kertaus hetki:
+
+// Tutki missä kohtaa käytettiin, kuinka toimii / mikä se on
+
+// - snackbar
+// - modal
+// - userinput, 3 eri vaihtoehtoa
+// - userinput hallinta
+// - dialog
+// - context
+// - appbar, iconbutton
+// - listview
+// - dismissible
+// - themes

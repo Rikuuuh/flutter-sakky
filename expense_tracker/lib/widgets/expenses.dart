@@ -1,3 +1,4 @@
+import 'package:expense_tracker/widgets/chart/chart.dart';
 import 'package:expense_tracker/widgets/expenses_list/expenses_list.dart';
 import 'package:flutter/material.dart';
 import 'package:expense_tracker/models/expense.dart';
@@ -17,13 +18,13 @@ class _ExpensesState extends State<Expenses> {
   final List<Expense> _registeredExpenses = [
     Expense(
       title: 'Food',
-      amount: 2.99,
+      amount: 50,
       date: DateTime.now().subtract(const Duration(days: 1)),
       category: Category.food,
     ),
     Expense(
       title: 'Plane ticket',
-      amount: 500,
+      amount: 120,
       date: DateTime.now().subtract(const Duration(days: 1)),
       category: Category.leisure,
     )
@@ -31,6 +32,8 @@ class _ExpensesState extends State<Expenses> {
 
   void _openAddExpenseOverlay() {
     showModalBottomSheet(
+        // Funktio showModal, joka avaa käyttäjälle modalin , jossa käyttäjä
+        // voi lisätä uuden ostoksen.
         isScrollControlled: true,
         context: context,
         builder: (ctx) => NewExpense(
@@ -52,6 +55,9 @@ class _ExpensesState extends State<Expenses> {
     // Poiston peruutus
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(
+      // SnackBar on tapa ilmoittaa käyttäjälle viestejä Flutterissa
+      // Tässä tapauksessa annetaan ilmoitus ostoksen poistosta ja nappi,
+      // jolla ostos voidaan palauttaa.
       SnackBar(
         duration: const Duration(seconds: 5),
         content: const Text('Expense deleted.'),
@@ -69,6 +75,11 @@ class _ExpensesState extends State<Expenses> {
 
   @override
   Widget build(BuildContext context) {
+    // print(MediaQuery.of(context).size.width);
+    // print(MediaQuery.of(context).size.height);
+
+    final width = MediaQuery.of(context).size.width;
+
     Widget mainContent = const Center(
       child: Text('No expenses found. Start adding some!'),
     );
@@ -80,20 +91,52 @@ class _ExpensesState extends State<Expenses> {
       );
     }
     return Scaffold(
-      appBar: AppBar(title: const Text('Flutter ExpenseTracker'), actions: [
-        IconButton(
-          onPressed: _openAddExpenseOverlay,
-          icon: const Icon(Icons.add_circle_outline),
-        )
-      ]),
-      body: Column(
-        children: [
-          const Text('Chart Goes Here'),
-          Expanded(
-            child: mainContent,
-          ),
+      // AppBar, luo yläreunaan tilan, jossa löytyy teksti Flutter ExpenseTracker
+      // ja icon-nappi josta avautuu uuden Expensen teko
+      appBar: AppBar(
+        title: const Text('Flutter ExpenseTracker'),
+        actions: [
+          IconButton(
+            onPressed: _openAddExpenseOverlay,
+            icon: const Icon(Icons.add_circle_outline),
+          )
         ],
       ),
+      body: width < 600 // Ternary
+          ? Column(
+              // TRUE
+              children: [
+                Chart(expenses: _registeredExpenses),
+                Expanded(
+                  child: mainContent,
+                ),
+              ],
+            )
+          : Row(
+              // FALSE
+              // Vierekkäin
+              children: [
+                Expanded(
+                  child: Chart(expenses: _registeredExpenses),
+                ),
+                Expanded(
+                  child: mainContent,
+                ),
+              ],
+            ),
     );
   }
 }
+
+
+// Size contrains ja preferences Widgeteillä
+// Nämä määrittelevät Widgetin koon
+// Constraint tarkoittaa vanhemman rajoituksia sen lapsille
+// Preference tarkoittaa widgetin omaa käyttäytymistä 
+// Jokaisella widgetillä on sen omat preferences (kuinka se widget itse haluaa asettua)
+// Ja sen constraints sen lapsille (kuinka widget rajoittaa sen lapsiaan.)
+
+// Jos on  vanhempi widget (esim column) ja sillä lapsi (esim. listview)
+// Column ei rajoita sen lapsien korkeutta ja listview preference on ääretön
+// korkeus. Lopputuloksena on ääretön korkeus listview widgetille, joka on mah-
+// doton toteuttaa.
