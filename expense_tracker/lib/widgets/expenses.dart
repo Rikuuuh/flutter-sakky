@@ -32,13 +32,15 @@ class _ExpensesState extends State<Expenses> {
 
   void _openAddExpenseOverlay() {
     showModalBottomSheet(
-        // Funktio showModal, joka avaa käyttäjälle modalin , jossa käyttäjä
-        // voi lisätä uuden ostoksen.
-        isScrollControlled: true,
-        context: context,
-        builder: (ctx) => NewExpense(
-              onAddExpense: _addExpense,
-            ));
+      useSafeArea: true, // Ei käytetä käyttöliittymän tilaa (kamera, jne)
+      // Funktio showModal, joka avaa käyttäjälle modalin , jossa käyttäjä
+      // voi lisätä uuden ostoksen.
+      isScrollControlled: true,
+      context: context,
+      builder: (ctx) => NewExpense(
+        onAddExpense: _addExpense,
+      ),
+    );
   }
 
   void _addExpense(Expense expense) {
@@ -78,7 +80,7 @@ class _ExpensesState extends State<Expenses> {
     // print(MediaQuery.of(context).size.width);
     // print(MediaQuery.of(context).size.height);
 
-    final width = MediaQuery.of(context).size.width;
+    final width = MediaQuery.of(context).size.width; // Näytön koon perusteella
 
     Widget mainContent = const Center(
       child: Text('No expenses found. Start adding some!'),
@@ -94,6 +96,7 @@ class _ExpensesState extends State<Expenses> {
       // AppBar, luo yläreunaan tilan, jossa löytyy teksti Flutter ExpenseTracker
       // ja icon-nappi josta avautuu uuden Expensen teko
       appBar: AppBar(
+        centerTitle: true, // iOS oletus asetus
         title: const Text('Flutter ExpenseTracker'),
         actions: [
           IconButton(
@@ -140,3 +143,13 @@ class _ExpensesState extends State<Expenses> {
 // Column ei rajoita sen lapsien korkeutta ja listview preference on ääretön
 // korkeus. Lopputuloksena on ääretön korkeus listview widgetille, joka on mah-
 // doton toteuttaa.
+
+// Column preferences: width: niin paljon kuin sen lapset tarvitsevat
+//                     height: ääretön 
+
+// Row preferences: width: ääretön
+//                  height: niin paljon kuin lapset tarvitsevat
+
+
+// Vanhempi jola on ääretön constraint ja lapsi jolla on ääretön preference
+// Väliin pitää laittaa Expanded widget, joka katkaisee äärettömien ketjun
