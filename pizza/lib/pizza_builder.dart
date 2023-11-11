@@ -10,38 +10,46 @@ class PizzaBuilder extends StatefulWidget {
 }
 
 class _PizzaBuilderState extends State<PizzaBuilder> {
-  final List<Map<Ingredient, int>> selectedIngredients = [];
   bool isMediumSelected = true;
   int totalPrice = 1090;
 
+  Map<Ingredient, int> selectedIngredients = {};
+
   void incrementIngredient(Ingredient ingredient) {
     setState(() {
-      final Map<Ingredient, int> ingredientMap = selectedIngredients
-          .firstWhere((element) => element.containsKey(ingredient), orElse: () {
-        final newMap = {ingredient: 0};
-        selectedIngredients.add(newMap);
-        return newMap;
-      });
-      ingredientMap[ingredient] = (ingredientMap[ingredient] ?? 0) + 1;
+      selectedIngredients.update(
+        ingredient,
+        (quantity) => quantity + 1,
+        ifAbsent: () => 1,
+      );
+
+      calculateTotalPrice();
     });
   }
 
   void removeIngredient(Ingredient ingredient) {
     setState(() {
-      final Map<Ingredient, int> ingredientMap = selectedIngredients
-          .firstWhere((element) => element.containsKey(ingredient), orElse: () {
-        final newMap = {ingredient: 1};
-        selectedIngredients.remove(newMap);
-        return newMap;
-      });
-      ingredientMap[ingredient] = (ingredientMap[ingredient] ?? 0) - 1;
+      final currentQuantity = selectedIngredients[ingredient];
+      if (currentQuantity != null && currentQuantity > 1) {
+        selectedIngredients[ingredient] = currentQuantity - 1;
+      } else {
+        selectedIngredients.remove(ingredient);
+      }
+
+      calculateTotalPrice();
     });
   }
 
   void calculateTotalPrice() {
     int basePrice = isMediumSelected ? 1090 : 2090;
-    int ingredientsPriceSmall = 0;
-    int calculatedTotalPrice = basePrice + ingredientsPriceSmall;
+    double ingredientsPrice = 0;
+
+    selectedIngredients.forEach((ingredient, quantity) {
+      ingredientsPrice += ingredient.price * quantity;
+    });
+
+    int calculatedTotalPrice = basePrice +
+        (ingredientsPrice * 100).toInt(); // Muunnetaan eurot senteiksi
 
     setState(() {
       totalPrice = calculatedTotalPrice;
@@ -69,6 +77,44 @@ class _PizzaBuilderState extends State<PizzaBuilder> {
               isMediumSelected: isMediumSelected,
               totalPrice: totalPrice,
               onCalculateTotalPrice: calculateTotalPrice),
+        ),
+        bottomNavigationBar: BottomAppBar(
+          child: Container(
+            height: 50.0,
+            color: Colors.green,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                IconButton(
+                  icon: const Icon(Icons.remove),
+                  onPressed: selectedIngredients.isNotEmpty
+                      ? () {
+                          // Toteuta logiikka vähentämään valittujen ainesosien määrää ja päivitä hinta
+                        }
+                      : null,
+                ),
+                const Text('1'),
+                IconButton(
+                  icon: const Icon(Icons.add),
+                  onPressed: selectedIngredients.isNotEmpty
+                      ? () {
+                          // Toteuta logiikka vähentämään valittujen ainesosien määrää ja päivitä hinta
+                        }
+                      : null,
+                ),
+                Expanded(
+                  child: Center(
+                    child: Text(
+                      selectedIngredients.isEmpty
+                          ? 'Lisää ainakin yksi täyte'
+                          : 'Lisää tilaukseen ja €${(totalPrice / 100).toStringAsFixed(2)}',
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );

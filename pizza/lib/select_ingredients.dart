@@ -4,7 +4,7 @@ import 'package:pizza/data/ingredients.dart';
 import 'package:pizza/pizza_button.dart';
 import 'package:pizza/view_screen.dart';
 
-class SelectIngredients extends StatelessWidget {
+class SelectIngredients extends StatefulWidget {
   const SelectIngredients({
     super.key,
     required this.selectedIngredients,
@@ -20,75 +20,101 @@ class SelectIngredients extends StatelessWidget {
   final void Function(Ingredient) onRemoveIngredient;
   final void Function() onCalculateTotalPrice;
   final void Function(bool) onSizeToggle;
-  final List<Map<Ingredient, int>> selectedIngredients;
+  final Map<Ingredient, int> selectedIngredients;
   final bool isMediumSelected;
   final int totalPrice;
+
+  @override
+  State<SelectIngredients> createState() => _SelectIngredientsState();
+}
+
+class _SelectIngredientsState extends State<SelectIngredients> {
+  Map<String, bool> selectedIngredients = {};
+  Map<Ingredient, int> ingredientQuantities = {};
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
         children: [
           ViewScreen(
-            isMediumSelected: isMediumSelected,
-            totalPrice: totalPrice,
+            isMediumSelected: widget.isMediumSelected,
+            totalPrice: widget.totalPrice,
           ),
           PizzaButton(
-            isMediumSelected: isMediumSelected,
-            totalPrice: totalPrice,
-            onSizeToggle: onSizeToggle,
+            isMediumSelected: widget.isMediumSelected,
+            totalPrice: widget.totalPrice,
+            onSizeToggle: widget.onSizeToggle,
+            onAddIngredient: widget.onAddIngredient,
+            onRemoveIngredient: widget.onRemoveIngredient,
+            selectedIngredients: widget.selectedIngredients,
           ),
-          // ... = SPREAD OPERAATIO; purkaa datarakenteen listasta
-          // yksittäisiksi widgeteiksi
-          ...ingredients.map((item) {
-            // Haetaan käytävän Ingredient objektin (item) map<Ingredient, int>
-            // !<key, value>! Ja siitä objektista saadaan lukumäärä, montako
-            // kertaa se on valittu.
-            // map löytyy selectedIngredients listasta.
-            final mapOfOneSelectedIngredient = selectedIngredients.firstWhere(
-              (oneMap) => oneMap.containsKey(item),
-              orElse: () => {},
-            );
-
-            // Otetaan avain-arvo parista arvo talteen <int>!
-            final numberOfPortions = mapOfOneSelectedIngredient[item];
-
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                TextButton(
-                  onPressed: () {
-                    onAddIngredient(item);
-                  },
-                  child: Text(
-                    '${item.name} = $numberOfPortions',
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  ),
+          ...categorizedIngredients.keys.map((String category) {
+            return ExpansionTile(
+              title: Text(
+                category,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromARGB(255, 34, 139, 34),
                 ),
-                IconButton(
-                  onPressed: () {
-                    onRemoveIngredient(item);
-                  },
-                  icon: const Icon(
-                    Icons.remove_circle_outlined,
-                    color: Color.fromARGB(255, 255, 10, 0),
+              ),
+              collapsedBackgroundColor: const Color.fromARGB(38, 34, 139, 34),
+              backgroundColor: const Color.fromARGB(38, 34, 139, 34),
+              children: categorizedIngredients[category]!
+                  .map((Ingredient ingredient) {
+                int currentQuantity = ingredientQuantities[ingredient] ?? 0;
+                bool isSelected = currentQuantity > 0;
+                return ListTile(
+                  title: Text(ingredient.name),
+                  subtitle: Text('+${ingredient.price.toStringAsFixed(2)} €'),
+                  trailing: Row(
+                    mainAxisSize:
+                        MainAxisSize.min, // Keeps the Row width to a minimum
+                    children: <Widget>[
+                      IconButton(
+                        icon: const Icon(Icons.remove, color: Colors.red),
+                        onPressed: currentQuantity > 0
+                            ? () {
+                                setState(() {
+                                  ingredientQuantities[ingredient] =
+                                      currentQuantity - 1;
+                                  widget.onRemoveIngredient(ingredient);
+                                  widget.onCalculateTotalPrice();
+                                });
+                              }
+                            : null,
+                      ),
+                      Text(currentQuantity
+                          .toString()), // Shows the current quantity
+                      IconButton(
+                        icon: const Icon(Icons.add, color: Colors.green),
+                        onPressed: () {
+                          setState(() {
+                            ingredientQuantities[ingredient] =
+                                currentQuantity + 1;
+                            widget.onAddIngredient(ingredient);
+                            widget.onCalculateTotalPrice();
+                          });
+                        },
+                      ),
+                    ],
                   ),
-                ),
-                IconButton(
-                  onPressed: () {
-                    onAddIngredient(item);
+                  onTap: () {
+                    setState(() {
+                      if (isSelected) {
+                        ingredientQuantities[ingredient] = 0;
+                        widget.onRemoveIngredient(ingredient);
+                      } else {
+                        ingredientQuantities[ingredient] = 1;
+                        widget.onAddIngredient(ingredient);
+                      }
+                      widget.onCalculateTotalPrice();
+                    });
                   },
-                  icon: const Icon(
-                    Icons.add_circle_outlined,
-                    color: Color.fromARGB(255, 47, 185, 47),
-                  ),
-                )
-              ],
+                );
+              }).toList(),
             );
-          }),
+          }).toList(),
         ],
       ),
     );

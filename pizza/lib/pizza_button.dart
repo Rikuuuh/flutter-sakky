@@ -1,16 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pizza/image_button.dart';
+import 'package:pizza/models/ingredient.dart';
 
 class PizzaButton extends StatefulWidget {
-  const PizzaButton(
-      {super.key,
-      required this.isMediumSelected,
-      required this.totalPrice,
-      required this.onSizeToggle});
+  const PizzaButton({
+    super.key,
+    required this.isMediumSelected,
+    required this.totalPrice,
+    required this.onSizeToggle,
+    required this.selectedIngredients,
+    required this.onAddIngredient,
+    required this.onRemoveIngredient,
+  });
   final bool isMediumSelected;
   final int totalPrice;
   final void Function(bool) onSizeToggle;
+  final void Function(Ingredient) onAddIngredient;
+  final void Function(Ingredient) onRemoveIngredient;
+  final Map<Ingredient, int> selectedIngredients;
   @override
   State<PizzaButton> createState() => _PizzaButtonState();
 }
@@ -62,12 +70,14 @@ class _PizzaButtonState extends State<PizzaButton> {
                     backgroundColor: MaterialStateProperty.all(
                         widget.isMediumSelected ? activeColor : defaultColor),
                   ),
-                  child: Text('Medium',
-                      style: TextStyle(
-                          fontSize: 20,
-                          color: widget.isMediumSelected
-                              ? defaultColor
-                              : activeColor)),
+                  child: Text(
+                    'Medium',
+                    style: TextStyle(
+                        fontSize: 20,
+                        color: widget.isMediumSelected
+                            ? defaultColor
+                            : activeColor),
+                  ),
                 ),
               ),
               Expanded(
@@ -100,9 +110,21 @@ class _PizzaButtonState extends State<PizzaButton> {
             style: GoogleFonts.lato(
                 color: Colors.black, fontSize: 17, fontWeight: FontWeight.bold),
           ),
-          const Stack(
+          Stack(
             children: <Widget>[
-              ImageButton(),
+              ImageButton(
+                selectedIngredients: widget.selectedIngredients,
+                onAddIngredient: widget.onAddIngredient,
+                onRemoveIngredient: widget.onRemoveIngredient,
+                onIngredientSelected: (Ingredient ingredient) {
+                  if (widget.selectedIngredients.containsKey(ingredient) &&
+                      widget.selectedIngredients[ingredient]! > 0) {
+                    widget.onRemoveIngredient(ingredient);
+                  } else {
+                    widget.onAddIngredient(ingredient);
+                  }
+                },
+              ),
             ],
           )
         ],

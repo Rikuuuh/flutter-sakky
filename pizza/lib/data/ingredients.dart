@@ -1,16 +1,31 @@
 import 'package:pizza/models/ingredient.dart';
 
-const ingredients = [
-  Ingredient('beef\'n\'roast-naudanjauheliha', 62.5, 315.5, 1.00),
-  Ingredient('tonnikala', 75.2, 138.8, 1.00),
-  Ingredient('herkkusieni', 52.3, 24.5, 1.50),
-  Ingredient('katkarapu', 47.4, 95.9, 2.00),
-  Ingredient('feta', 30.1, 69.1, 1.00),
-  Ingredient('ananas', 9, 47.5, 0.50)
+const Map<String, List<Ingredient>> categorizedIngredients = {
+  'Lihat': [
+    Ingredient('beef\'n\'roast-naudanjauheliha', 1.00),
+  ],
+  'Kasvikset': [
+    Ingredient('ananas', 0.50),
+  ],
+  'Juustot': [
+    Ingredient('feta', 1.00),
+  ],
+  'Kalat': [
+    Ingredient('tonnikala', 1.00),
+    Ingredient('katkarapu', 2.00),
+  ],
+};
+
+const fundamentIngredients = [
+  FundamentIngredients('normaali pizzapohja', 0.00),
+  FundamentIngredients('gluteeniton pizzapohja', 2.50),
+  FundamentIngredients('ketopizzapohja', 3.00),
+  FundamentIngredients('runsaskuituinen pizzapohja', 0.00)
 ];
 
-const finalingredients = [
-  FinalIngredients('valkosipuli', 0.50),
-  FinalIngredients('kirsikkatomaatti', 1.00),
-  FinalIngredients('Aura@-juusto', 1.00),
+const dressingIngredients = [
+  DressingIngredients('tomaattikastike', 0.00),
+  DressingIngredients('mexicana-kastike', 1.00),
+  DressingIngredients('cheddarjuustokastike', 1.00),
+  DressingIngredients('kebabkastike', 1.00)
 ];
