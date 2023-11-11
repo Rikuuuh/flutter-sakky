@@ -68,8 +68,7 @@ class _SelectIngredientsState extends State<SelectIngredients> {
                   title: Text(ingredient.name),
                   subtitle: Text('+${ingredient.price.toStringAsFixed(2)} €'),
                   trailing: Row(
-                    mainAxisSize:
-                        MainAxisSize.min, // Keeps the Row width to a minimum
+                    mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       IconButton(
                         icon: const Icon(Icons.remove, color: Colors.red),
@@ -84,8 +83,7 @@ class _SelectIngredientsState extends State<SelectIngredients> {
                               }
                             : null,
                       ),
-                      Text(currentQuantity
-                          .toString()), // Shows the current quantity
+                      Text(currentQuantity.toString()),
                       IconButton(
                         icon: const Icon(Icons.add, color: Colors.green),
                         onPressed: () {

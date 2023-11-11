@@ -14,7 +14,7 @@ class _PizzaBuilderState extends State<PizzaBuilder> {
   int totalPrice = 1090;
 
   Map<Ingredient, int> selectedIngredients = {};
-
+  // Funktio joka lisää ingredientin ja päivittää TotalPricen
   void incrementIngredient(Ingredient ingredient) {
     setState(() {
       selectedIngredients.update(
@@ -27,6 +27,7 @@ class _PizzaBuilderState extends State<PizzaBuilder> {
     });
   }
 
+  // Poistaa ingredientin ja päivittää TotalPricen
   void removeIngredient(Ingredient ingredient) {
     setState(() {
       final currentQuantity = selectedIngredients[ingredient];
@@ -40,6 +41,7 @@ class _PizzaBuilderState extends State<PizzaBuilder> {
     });
   }
 
+  // BasePrice on medium pizza; jokaisen ingredientin lisäyksen jälkeen setstaten sisällä uus TotalPrice
   void calculateTotalPrice() {
     int basePrice = isMediumSelected ? 1090 : 2090;
     double ingredientsPrice = 0;
@@ -48,17 +50,24 @@ class _PizzaBuilderState extends State<PizzaBuilder> {
       ingredientsPrice += ingredient.price * quantity;
     });
 
-    int calculatedTotalPrice = basePrice +
-        (ingredientsPrice * 100).toInt(); // Muunnetaan eurot senteiksi
+    int calculatedTotalPrice = basePrice + (ingredientsPrice * 100).toInt();
 
     setState(() {
       totalPrice = calculatedTotalPrice;
     });
   }
 
+  // Funktio jolla vaihdetaan medium / large pizzan välillä
   void toggleSize(bool isMedium) {
     setState(() {
       isMediumSelected = isMedium;
+      calculateTotalPrice();
+    });
+  }
+
+  void toggleNewPizza() {
+    setState(() {
+      // todo
       calculateTotalPrice();
     });
   }
@@ -89,7 +98,7 @@ class _PizzaBuilderState extends State<PizzaBuilder> {
                   icon: const Icon(Icons.remove),
                   onPressed: selectedIngredients.isNotEmpty
                       ? () {
-                          // Toteuta logiikka vähentämään valittujen ainesosien määrää ja päivitä hinta
+                          // TO DO
                         }
                       : null,
                 ),
@@ -98,13 +107,14 @@ class _PizzaBuilderState extends State<PizzaBuilder> {
                   icon: const Icon(Icons.add),
                   onPressed: selectedIngredients.isNotEmpty
                       ? () {
-                          // Toteuta logiikka vähentämään valittujen ainesosien määrää ja päivitä hinta
+                          // TO DO
                         }
                       : null,
                 ),
                 Expanded(
                   child: Center(
                     child: Text(
+                      // Jos on tyhjä "Kori" niin näyttää eri tekstin
                       selectedIngredients.isEmpty
                           ? 'Lisää ainakin yksi täyte'
                           : 'Lisää tilaukseen ja €${(totalPrice / 100).toStringAsFixed(2)}',

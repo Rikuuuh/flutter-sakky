@@ -20,7 +20,6 @@ class ImageButton extends StatefulWidget {
 }
 
 class ImageButtonState extends State<ImageButton> {
-  // Kuvakkeiden tiedot
   final List<Map<String, dynamic>> ingredientData = [
     {
       'name': 'valkosipuli',
@@ -42,7 +41,6 @@ class ImageButtonState extends State<ImageButton> {
     },
   ];
 
-  // Valittujen kuvakkeiden tila
   List<bool> isSelected = [false, false, false];
   @override
   void initState() {
@@ -59,7 +57,7 @@ class ImageButtonState extends State<ImageButton> {
   void handleIngredientSelected(Ingredient ingredient, int index) {
     setState(() {
       isSelected[index] = !isSelected[index];
-      // Kutsu callback-funktiota, jos kuvake on valittu
+
       if (isSelected[index]) {
         widget.onAddIngredient(ingredient);
       } else {
@@ -111,7 +109,7 @@ class ImageButtonState extends State<ImageButton> {
                   ),
                 ),
                 Positioned(
-                  bottom: -3, // Säädä tätä arvoa tarvittaessa
+                  bottom: -3,
                   child: Text(
                     '${data['price'].toStringAsFixed(2)} €',
                     style: const TextStyle(
