@@ -43,6 +43,8 @@ class _NewExpenseState extends State<NewExpense> {
   }
 
   void _showDialog() {
+    // Platform. voidaan tehdä erillinen koodi kuten alla on tehty IOS käyttö
+    // liittymälle.
     if (Platform.isIOS) {
       showCupertinoDialog(
         context: context,
@@ -134,6 +136,7 @@ class _NewExpenseState extends State<NewExpense> {
             padding: EdgeInsets.fromLTRB(16, 16, 16, 16 + keyboardSpace),
             child: Column(
               children: [
+                // Jos näytön maxWidth on pienempi kuin 600 näytetään seuraavat asiat
                 if (width >= 600) // Listan if syntaksi, eiaaltosulkuja{}
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -173,7 +176,9 @@ class _NewExpenseState extends State<NewExpense> {
                       label: Text('Title'),
                     ),
                   ),
+                // Jos näytön maxWidth on pienempi kuin 600 näytetään seuraavat asiat
                 if (width >= 600) const SizedBox(height: 12),
+                // Jos näytön maxWidth on pienempi kuin 600 näytetään seuraavat asiat
                 if (width >= 600)
                   Row(
                     children: [

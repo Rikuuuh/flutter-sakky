@@ -98,13 +98,21 @@ void main() {
 
 // Tutki missä kohtaa käytettiin, kuinka toimii / mikä se on
 
-// - snackbar
-// - modal
-// - userinput, 3 eri vaihtoehtoa
-// - userinput hallinta
-// - dialog
-// - context
-// - appbar, iconbutton
-// - listview
-// - dismissible
-// - themes
+// - snackbar !
+// - modal !
+// - userinput, 3 eri vaihtoehtoa !
+// - userinput hallinta !
+// - dialog !
+// - context !
+// - appbar, iconbutton !
+// - listview !
+// - dismissible !
+// - themes !
+
+
+
+//  - MediaQuery, useampi eri paikka ja mitä tietoa MediaQuerystä käytetään
+//   - LayoutBuilder !
+//   - Listan sisäinen if rakenne !
+//   - safeArea !
+//   - Platform !

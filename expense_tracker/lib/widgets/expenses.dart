@@ -32,7 +32,8 @@ class _ExpensesState extends State<Expenses> {
 
   void _openAddExpenseOverlay() {
     showModalBottomSheet(
-      useSafeArea: true, // Ei käytetä käyttöliittymän tilaa (kamera, jne)
+      useSafeArea:
+          true, // Ei käytetä käyttöliittymän tilaa (kamera, jne) !yläreuna!
       // Funktio showModal, joka avaa käyttäjälle modalin , jossa käyttäjä
       // voi lisätä uuden ostoksen.
       isScrollControlled: true,
