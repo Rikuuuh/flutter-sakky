@@ -96,6 +96,7 @@ class _PizzaBuilderState extends State<PizzaBuilder> {
               children: <Widget>[
                 IconButton(
                   icon: const Icon(Icons.remove),
+                  // Buttonit tulevat valituiksi jos on valittuna raaka-aineita
                   onPressed: selectedIngredients.isNotEmpty
                       ? () {
                           // TO DO
@@ -105,6 +106,7 @@ class _PizzaBuilderState extends State<PizzaBuilder> {
                 const Text('1'),
                 IconButton(
                   icon: const Icon(Icons.add),
+                  // Buttonit tulevat valituiksi jos on valittuna raaka-aineita
                   onPressed: selectedIngredients.isNotEmpty
                       ? () {
                           // TO DO
@@ -117,7 +119,7 @@ class _PizzaBuilderState extends State<PizzaBuilder> {
                       // Jos on tyhjä "Kori" niin näyttää eri tekstin
                       selectedIngredients.isEmpty
                           ? 'Lisää ainakin yksi täyte'
-                          : 'Lisää tilaukseen ja €${(totalPrice / 100).toStringAsFixed(2)}',
+                          : 'Lisää tilaukseen €${(totalPrice / 100).toStringAsFixed(2)}',
                       style: const TextStyle(color: Colors.white),
                     ),
                   ),
