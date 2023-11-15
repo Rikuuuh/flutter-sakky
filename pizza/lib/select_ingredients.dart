@@ -14,6 +14,12 @@ class SelectIngredients extends StatefulWidget {
     required this.onRemoveIngredient,
     required this.onCalculateTotalPrice,
     required this.onSizeToggle,
+    required this.onSelectCheese,
+    required this.onSelectDressing,
+    required this.onSelectFundament,
+    required this.selectedCheese,
+    required this.selectedDressing,
+    required this.selectedFundament,
   });
 
   final void Function(Ingredient) onAddIngredient;
@@ -23,6 +29,12 @@ class SelectIngredients extends StatefulWidget {
   final Map<Ingredient, int> selectedIngredients;
   final bool isMediumSelected;
   final int totalPrice;
+  final FinalIngredient selectedFundament;
+  final FinalIngredient selectedDressing;
+  final FinalIngredient selectedCheese;
+  final Function(FinalIngredient) onSelectFundament;
+  final Function(FinalIngredient) onSelectDressing;
+  final Function(FinalIngredient) onSelectCheese;
 
   @override
   State<SelectIngredients> createState() => _SelectIngredientsState();
@@ -48,6 +60,13 @@ class _SelectIngredientsState extends State<SelectIngredients> {
             onAddIngredient: widget.onAddIngredient,
             onRemoveIngredient: widget.onRemoveIngredient,
             selectedIngredients: widget.selectedIngredients,
+            onCalculateTotalPrice: widget.onCalculateTotalPrice,
+            selectedFundament: widget.selectedFundament,
+            selectedDressing: widget.selectedDressing,
+            selectedCheese: widget.selectedCheese,
+            onSelectFundament: widget.onSelectFundament,
+            onSelectDressing: widget.onSelectDressing,
+            onSelectCheese: widget.onSelectCheese,
           ),
           ...categorizedIngredients.keys.map((String category) {
             return ExpansionTile(

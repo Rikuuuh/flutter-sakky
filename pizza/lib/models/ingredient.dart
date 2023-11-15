@@ -5,21 +5,19 @@ class Ingredient {
   final double price;
 }
 
-class FinalIngredients {
-  const FinalIngredients(this.name, this.price);
+class FinalIngredient {
+  const FinalIngredient(this.name, this.price);
 
   final String name;
   final double price;
-}
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is FinalIngredient &&
+        other.name == name &&
+        other.price == price;
+  }
 
-class FundamentIngredients {
-  const FundamentIngredients(this.name, this.price);
-  final String name;
-  final double price;
-}
-
-class DressingIngredients {
-  const DressingIngredients(this.name, this.price);
-  final String name;
-  final double price;
+  @override
+  int get hashCode => name.hashCode ^ price.hashCode;
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pizza/data/ingredients.dart';
 import 'package:pizza/models/ingredient.dart';
 import 'package:pizza/select_ingredients.dart';
 
@@ -12,6 +13,10 @@ class PizzaBuilder extends StatefulWidget {
 class _PizzaBuilderState extends State<PizzaBuilder> {
   bool isMediumSelected = true;
   int totalPrice = 1090;
+  @override
+  var selectedFundament = fundamentIngredients[0];
+  var selectedDressing = dressingIngredients[0];
+  var selectedCheese = cheeseIngredients[0];
 
   Map<Ingredient, int> selectedIngredients = {};
   // Funktio joka lisää ingredientin ja päivittää TotalPricen
@@ -46,9 +51,15 @@ class _PizzaBuilderState extends State<PizzaBuilder> {
     int basePrice = isMediumSelected ? 1090 : 2090;
     double ingredientsPrice = 0;
 
+    // Calculate price for regular ingredients
     selectedIngredients.forEach((ingredient, quantity) {
       ingredientsPrice += ingredient.price * quantity;
     });
+
+    // Add price for FinalIngredients
+    ingredientsPrice += selectedFundament.price;
+    ingredientsPrice += selectedDressing.price;
+    ingredientsPrice += selectedCheese.price;
 
     int calculatedTotalPrice = basePrice + (ingredientsPrice * 100).toInt();
 
@@ -79,13 +90,36 @@ class _PizzaBuilderState extends State<PizzaBuilder> {
         body: Container(
           decoration: const BoxDecoration(color: Colors.white),
           child: SelectIngredients(
-              onSizeToggle: toggleSize,
-              selectedIngredients: selectedIngredients,
-              onAddIngredient: incrementIngredient,
-              onRemoveIngredient: removeIngredient,
-              isMediumSelected: isMediumSelected,
-              totalPrice: totalPrice,
-              onCalculateTotalPrice: calculateTotalPrice),
+            onSizeToggle: toggleSize,
+            selectedIngredients: selectedIngredients,
+            onAddIngredient: incrementIngredient,
+            onRemoveIngredient: removeIngredient,
+            isMediumSelected: isMediumSelected,
+            totalPrice: totalPrice,
+            onCalculateTotalPrice: calculateTotalPrice,
+            selectedFundament: selectedFundament,
+            selectedDressing: selectedDressing,
+            selectedCheese: selectedCheese,
+            // Add setters for FinalIngredients
+            onSelectFundament: (FinalIngredient fi) {
+              setState(() {
+                selectedFundament = fi;
+                calculateTotalPrice();
+              });
+            },
+            onSelectDressing: (FinalIngredient fi) {
+              setState(() {
+                selectedDressing = fi;
+                calculateTotalPrice();
+              });
+            },
+            onSelectCheese: (FinalIngredient fi) {
+              setState(() {
+                selectedCheese = fi;
+                calculateTotalPrice();
+              });
+            },
+          ),
         ),
         bottomNavigationBar: BottomAppBar(
           child: Container(
