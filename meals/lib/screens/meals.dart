@@ -4,15 +4,24 @@ import 'package:meals/screens/meal_details.dart';
 import 'package:meals/widgets/meal_item.dart';
 
 class MealsScreen extends StatelessWidget {
-  const MealsScreen({super.key, required this.title, required this.meals});
+  const MealsScreen({
+    super.key,
+    this.title, // Otetaan required pois
+    required this.meals,
+    required this.onToggleFavorite,
+  });
 
-  final String title; // Tulee category_grid_item widgetistä
+  final String? title; // Tulee category_grid_item widgetistä
   final List<Meal> meals; // Tulee category_grid_item widgetistä
+  final void Function(Meal meal) onToggleFavorite;
 
   void selectMeal(BuildContext context, Meal meal) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => MealDetailsScreen(meal: meal),
+        builder: (context) => MealDetailsScreen(
+          meal: meal,
+          onToggleFavorite: onToggleFavorite,
+        ),
       ),
     );
   }
@@ -44,7 +53,7 @@ class MealsScreen extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             Text(
-              'Try selecting a different category!',
+              'Start adding your Favorites',
               style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                     color: Theme.of(context).colorScheme.onBackground,
                   ),
@@ -53,9 +62,14 @@ class MealsScreen extends StatelessWidget {
         ),
       );
     }
+
+    if (title == null) {
+      return content;
+    }
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(title),
+        title: Text(title!),
       ),
       body: content,
     );
