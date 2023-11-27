@@ -6,8 +6,12 @@ import 'package:meals/widgets/category_grid_item.dart';
 import 'package:meals/models/category.dart';
 
 class CategoriesScreen extends StatelessWidget {
-  const CategoriesScreen({super.key, required this.onToggleFavorite});
+  const CategoriesScreen(
+      {super.key,
+      required this.onToggleFavorite,
+      required this.availableMeals});
   final void Function(Meal meal) onToggleFavorite;
+  final List<Meal> availableMeals;
 
   // Tällä siirrytään Meals näkymään
   void _selectCategory(BuildContext context, Category selectedCategory) {
@@ -19,7 +23,7 @@ class CategoriesScreen extends StatelessWidget {
     // contains tutkii listan sisällön ja palauttaa true tai false, löytyykö sen parametri
     //      listasta vai ei
     // Otetaan lopuksi talteen muuttujaan
-    final filteredMeals = dummyMeals
+    final filteredMeals = availableMeals
         .where((meal) => meal.categories.contains(selectedCategory.id))
         .toList();
 
