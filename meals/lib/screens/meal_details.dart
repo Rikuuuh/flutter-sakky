@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:meals/models/meal.dart';
+import 'package:meals/providers/favorites_provider.dart';
 
-class MealDetailsScreen extends StatelessWidget {
+class MealDetailsScreen extends ConsumerWidget {
   const MealDetailsScreen({
     super.key,
     required this.meal, // nämä ovat parametreja (mitä halutaan ottaa vastaan)
-    required this.onToggleFavorite,
   });
   final Meal meal;
-  final void Function(Meal meal) onToggleFavorite;
 
   @override
-  Widget build(BuildContext context) {
+  // Consumer widget tarvitsee WidgetRef parametrin!!
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         title: Text(meal.title, style: const TextStyle(fontSize: 20)),
@@ -20,8 +21,24 @@ class MealDetailsScreen extends StatelessWidget {
             // onPressed on IconButton luokan parametri ja : oikealla puolen
             // on meidän syöttä argumentti
             onPressed: () {
-              onToggleFavorite(meal); // tämä on argumentti
-              // (mitä yritetään antaa)
+              // .read(), koska olemme funktion sisällä
+              final wasAdded = ref
+                  .read(favoriteMealsProvider.notifier)
+                  .toggleMealFavoritesStatus(meal);
+              ScaffoldMessenger.of(context)
+                  .clearSnackBars(); // Poistetaan vanha viesti
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  duration: const Duration(milliseconds: 1500),
+                  content: Text(
+                    wasAdded
+                        ? '${meal.title} has been added to the favorites!'
+                        : '${meal.title} has been deleted from favorites!',
+                    style: const TextStyle(
+                        fontSize: 13, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              );
             },
             icon: const Icon(
               Icons.star,

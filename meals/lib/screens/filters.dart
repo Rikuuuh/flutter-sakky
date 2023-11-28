@@ -2,10 +2,16 @@ import 'package:flutter/material.dart';
 
 // import 'package:meals/screens/tabs.dart';
 // import 'package:meals/widgets/main_drawer.dart';
-enum Filter { glutenFree, lactoseFree, vegetarian, vegan }
+enum Filter {
+  glutenFree,
+  lactoseFree,
+  vegetarian,
+  vegan,
+}
 
 class FiltersScreen extends StatefulWidget {
-  const FiltersScreen({super.key});
+  const FiltersScreen({super.key, required this.currentFilters});
+  final Map<Filter, bool> currentFilters;
 
   @override
   State<FiltersScreen> createState() => _FiltersScreenState();
@@ -18,7 +24,28 @@ class _FiltersScreenState extends State<FiltersScreen> {
   var _veganFreeFilterSet = false;
 
   @override
+  void initState() {
+    super.initState();
+    _glutenFreeFilterSet = widget.currentFilters[Filter.glutenFree]!;
+    _lactoseFreeFilterSet = widget.currentFilters[Filter.lactoseFree]!;
+    _vegetarianFreeFilterSet = widget.currentFilters[Filter.vegetarian]!;
+    _veganFreeFilterSet = widget.currentFilters[Filter.vegan]!;
+  }
+
+  @override
   Widget build(BuildContext context) {
+    void showInfoMessage(String message) {
+      ScaffoldMessenger.of(context).clearSnackBars(); // Poistetaan vanha viesti
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          duration: const Duration(seconds: 2),
+          content: Text(message,
+              style:
+                  const TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Your Filters'),
@@ -104,13 +131,13 @@ class _FiltersScreenState extends State<FiltersScreen> {
                 });
               },
               title: Text(
-                'Vegetarian-free',
+                'Vegetarian',
                 style: Theme.of(context).textTheme.titleLarge!.copyWith(
                       color: Theme.of(context).colorScheme.onBackground,
                     ),
               ),
               subtitle: Text(
-                'Only include lactose-free meals',
+                'Only include vegetarian meals',
                 style: Theme.of(context).textTheme.labelMedium!.copyWith(
                       color: Theme.of(context).colorScheme.onBackground,
                     ),
@@ -126,13 +153,13 @@ class _FiltersScreenState extends State<FiltersScreen> {
                 });
               },
               title: Text(
-                'Vegan-free',
+                'Vegan',
                 style: Theme.of(context).textTheme.titleLarge!.copyWith(
                       color: Theme.of(context).colorScheme.onBackground,
                     ),
               ),
               subtitle: Text(
-                'Only include lactose-free meals',
+                'Only include vegan meals',
                 style: Theme.of(context).textTheme.labelMedium!.copyWith(
                       color: Theme.of(context).colorScheme.onBackground,
                     ),
@@ -148,15 +175,16 @@ class _FiltersScreenState extends State<FiltersScreen> {
                   _vegetarianFreeFilterSet = false;
                   _veganFreeFilterSet = false;
                 });
+                showInfoMessage("All filters reseted!");
               },
               icon: Icon(Icons.settings_backup_restore_rounded,
-                  color: Theme.of(context).colorScheme.tertiary),
+                  color: Theme.of(context).colorScheme.secondary),
               label: Text(
                 'Reset your filters',
                 style: Theme.of(context)
                     .textTheme
                     .labelLarge!
-                    .copyWith(color: Theme.of(context).colorScheme.tertiary),
+                    .copyWith(color: Theme.of(context).colorScheme.secondary),
               ),
             ),
           ],

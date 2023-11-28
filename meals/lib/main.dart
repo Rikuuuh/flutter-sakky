@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import 'package:meals/screens/tabs.dart';
 
 final theme = ThemeData(
@@ -13,7 +13,7 @@ final theme = ThemeData(
 );
 
 void main(List<String> args) {
-  runApp(const App());
+  runApp(const ProviderScope(child: App()));
 }
 
 class App extends StatelessWidget {
@@ -27,3 +27,7 @@ class App extends StatelessWidget {
     );
   }
 }
+
+// Riverpod
+// 1. Luodaan providers tiedostoja, jossa on dataj akeino muokata dataa
+// 2. Widgetit ovat "Consumers", jotka käyttävät providerin dataa ja metodeja

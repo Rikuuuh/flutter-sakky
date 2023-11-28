@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:meals/data/dummy_data.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:meals/screens/categories.dart';
 import 'package:meals/screens/filters.dart';
 import 'package:meals/screens/meals.dart';
-import 'package:meals/models/meal.dart';
 import 'package:meals/widgets/main_drawer.dart';
+import 'package:meals/providers/meals_provider.dart';
+import 'package:meals/providers/favorites_provider.dart';
 
 // k on käytäntö flutterissa const arvoja varten
 
@@ -16,52 +17,25 @@ const kInitialFilters = {
   Filter.vegan: false,
 };
 
-class TabsScreen extends StatefulWidget {
+// Riverpod widgetit, niiden käyttö mahdolistaa ominaisuudet
+// (Stateful Widget => ConsumerStatefulWidget)
+// (StatelessWidget => ConsumerWidget)
+class TabsScreen extends ConsumerStatefulWidget {
+  // Riverpod widget
   const TabsScreen({super.key});
 
   @override
-  State<TabsScreen> createState() => _TabsScreenState();
+  // State => ConsumerState
+  ConsumerState<TabsScreen> createState() => _TabsScreenState();
 }
 
-class _TabsScreenState extends State<TabsScreen> {
+class _TabsScreenState extends ConsumerState<TabsScreen> {
   int _selectedPageIndex = 0; // Tämän perusteella näytetään oikea sivu
   // Funktio / Metodi
   // Kaikki metodit ovat funktioita,
   // mutta vain luokan funktiot ovat metodeja
-  // Jos ateria ei ole suosikeissa, lisätään se sinne
-  // Jos ateria on jo suosikeissa, otetaan se pois
-  final List<Meal> _favoriteMeals = [];
-  // ignore: unused_field
+
   Map<Filter, bool> _selectedFilters = kInitialFilters;
-  void _toggleMealFavoriteStatus(Meal meal) {
-    // Tutkitaan onko ateria jo listassa
-
-    final isExisting = _favoriteMeals.contains(meal);
-
-    // Suoritetaan poisto ja lisäys
-    // if(_favoriteMeals.contains(meal)){}
-    if (isExisting) {
-      setState(() {
-        _favoriteMeals.remove(meal);
-      });
-      _showInfoMessage("${meal.title} removed from favorites!");
-    } else {
-      setState(() {
-        _favoriteMeals.add(meal);
-      });
-      _showInfoMessage("${meal.title} added to favorites!");
-    }
-  }
-
-  void _showInfoMessage(String message) {
-    ScaffoldMessenger.of(context).clearSnackBars(); // Poistetaan vanha viesti
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message,
-            style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
-      ),
-    );
-  }
 
   void _selectPage(index) {
     setState(() {
@@ -76,7 +50,7 @@ class _TabsScreenState extends State<TabsScreen> {
       // Yleinen esimerkki on datan haku tietokannasta
       final result = await Navigator.of(context).push<Map<Filter, bool>>(
         MaterialPageRoute(
-          builder: (context) => const FiltersScreen(),
+          builder: (context) => FiltersScreen(currentFilters: _selectedFilters),
         ),
       );
       setState(() {
@@ -90,7 +64,14 @@ class _TabsScreenState extends State<TabsScreen> {
     // Lisätään muuttuja johon tallenetaan suodatettu aterialista
     // Käyttäjän valinnan perusteella
     // Säilytetäänkö ateria vai ei (where logiikka)
-    final availableMeals = dummyMeals.where((meal) {
+
+    // ref on osana RiverPod pakettia
+    // ref.read() <- lukee datan kerran
+    // suositellaan watch, se suorittaa build uudestaan jos data muuttuu
+    // eli päivittää käyttöliittymään uuden datan
+    final meals = ref.watch(mealsProvider);
+
+    final availableMeals = meals.where((meal) {
       // Jos käyttäjä on valinnut gluten free && ateria ei ole gluten free
       if (_selectedFilters[Filter.glutenFree]! && meal.isGlutenFree == false) {
         return false;
@@ -108,18 +89,13 @@ class _TabsScreenState extends State<TabsScreen> {
       return true;
     }).toList(); // Iterable => List
 
-    Widget activePage = CategoriesScreen(
-      availableMeals: availableMeals,
-      onToggleFavorite: _toggleMealFavoriteStatus,
-    );
+    Widget activePage = CategoriesScreen(availableMeals: availableMeals);
     var activePageTitle = 'Categories';
 
     // Jos indeksi onkin 1, eli suosikit
     if (_selectedPageIndex == 1) {
-      activePage = MealsScreen(
-        meals: _favoriteMeals,
-        onToggleFavorite: _toggleMealFavoriteStatus,
-      );
+      final favoriteMeals = ref.watch(favoriteMealsProvider);
+      activePage = MealsScreen(meals: favoriteMeals);
       activePageTitle = 'Your Favorites';
     }
     return Scaffold(
