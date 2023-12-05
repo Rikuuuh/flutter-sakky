@@ -8,7 +8,6 @@ class MainDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      width: 242,
       child: Column(
         children: [
           DrawerHeader(
@@ -29,7 +28,7 @@ class MainDrawer extends StatelessWidget {
             child: Row(
               children: [
                 Icon(
-                  Icons.fastfood_sharp,
+                  Icons.fastfood,
                   size: 48,
                   color: Theme.of(context).colorScheme.primary,
                 ),

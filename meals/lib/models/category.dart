@@ -6,8 +6,7 @@ class Category {
   const Category({
     required this.id,
     required this.title,
-    // Orange on oletusväri, jos ei sitä määritellä
-    this.color = Colors.orange,
+    this.color = Colors.orange, // Orange on oletusväri, jos ei sitä määritellä
   });
 
   final String id;

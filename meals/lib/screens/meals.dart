@@ -1,23 +1,28 @@
 import 'package:flutter/material.dart';
+
 import 'package:meals/models/meal.dart';
-import 'package:meals/screens/meal_details.dart';
 import 'package:meals/widgets/meal_item.dart';
+import 'package:meals/screens/meal_details.dart';
 
 class MealsScreen extends StatelessWidget {
   const MealsScreen({
     super.key,
-    this.title, // Otetaan required pois
+    this.title, // Poistetaan required, widgettiä voi käyttää joko tittelillä tai ilman sitä
     required this.meals,
+    // required this.onToggleFavorite,
   });
 
-  final String? title; // Tulee category_grid_item widgetistä
+  // Tulee category_grid_item widgetistä tai missä muualla tätä käytetään
+  final String? title;
   final List<Meal> meals; // Tulee category_grid_item widgetistä
+  // final void Function(Meal meal) onToggleFavorite;
 
   void selectMeal(BuildContext context, Meal meal) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => MealDetailsScreen(
+        builder: (ctx) => MealDetailsScreen(
           meal: meal,
+          // onToggleFavorite: onToggleFavorite,
         ),
       ),
     );
@@ -29,15 +34,16 @@ class MealsScreen extends StatelessWidget {
     Widget content = ListView.builder(
       itemCount: meals.length,
       itemBuilder: (ctx, index) => MealItem(
+        meal: meals[index],
         onSelectMeal: () {
           selectMeal(context, meals[index]);
         },
-        meal: meals[index],
       ),
     );
 
     // Tarkistetaan onko lista tyhjä
     if (meals.isEmpty) {
+      // Luodaan jokin toinen context scaffold widgetin body osioon
       content = Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -48,26 +54,33 @@ class MealsScreen extends StatelessWidget {
                     color: Theme.of(context).colorScheme.onBackground,
                   ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(
+              height: 16,
+            ),
             Text(
-              'Start adding your Favorites',
+              'Try selecting a different category!',
               style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                     color: Theme.of(context).colorScheme.onBackground,
                   ),
-            )
+            ),
           ],
         ),
       );
     }
-    // Jos katsotaan suosikkeja, title on null eikä luoda utta scaffoldia
+
+    // Jos katsotaan suosikkeja, title on null, eikä luoda uutta scaffoldia
     if (title == null) {
       return content;
     }
+
     // Tullaan kategorian kautta ja tarvitaan scaffold
     return Scaffold(
       appBar: AppBar(
         title: Text(title!),
       ),
+      // generoi body parametriin lista aterioite, huomioi, että lista voi olla todella pitkä
+      // jos ei ole yhtään ateriaa, näytetään jokin toinen teksti (categoria tyhjä)
+      // näytä listassa vain Text widget, jossa aterian otsikko.
       body: content,
     );
   }
