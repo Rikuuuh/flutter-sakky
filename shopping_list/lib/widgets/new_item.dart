@@ -1,8 +1,13 @@
 // Tässä tiedostossa on form, jolla käyttäjä voi lisätä
 // uusia tuotteita ostoslistaansa
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:shopping_list/data/categories.dart';
+import 'package:shopping_list/models/category.dart';
+import 'package:shopping_list/models/grocery_item.dart';
+import 'package:http/http.dart' as http;
 
 class NewItem extends StatefulWidget {
   const NewItem({super.key});
@@ -13,14 +18,52 @@ class NewItem extends StatefulWidget {
 
 class _NewItemState extends State<NewItem> {
   final _formKey = GlobalKey<FormState>();
+  // ignore: unused_field
   var _enteredName = '';
-  var _enteredQuantity = '';
+  var _enteredQuantity = 1;
+  // ignore: prefer_final_fields
+  var _selectedCategory = categories[Categories.vegetables]!;
 
-  void _saveItem() {
+  void _saveItem() async {
     // Suoritetaan kaikki validoinnit
     if (_formKey.currentState!.validate() == true) {
       _formKey.currentState!.save();
-      Navigator.pop(context);
+      final url = Uri.https(
+          'flutter-test-2-e03e7-default-rtdb.europe-west1.firebasedatabase.app',
+          'shopping-list.json');
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: json.encode(
+          {
+            'name': _enteredName,
+            'quantity': _enteredQuantity,
+            'category': _selectedCategory.title,
+          },
+        ),
+      ); //.then((value) => null)
+
+      print(response.statusCode);
+      print(response.body);
+
+      if (!context.mounted) {
+        // Lopetetaan suoritus, jos contextin widget ei ole enää aktiivinen
+        return;
+      }
+      Navigator.of(context).pop();
+
+      //Navigator.of(context).pop(
+      // Luodaan uusi GroceryItem objekti johon tallennetaan formilta saadut
+      // muuttujat ja viedään pop mukana GroceryList näkymään
+      //GroceryItem(
+      //id: DateTime.now().toString(), // Placeholder id
+      //name: _enteredName,
+      //quantity: _enteredQuantity,
+      //category: _selectedCategory,
+      //),
+      //);
     }
   }
 
@@ -53,6 +96,8 @@ class _NewItemState extends State<NewItem> {
                 },
                 onSaved: (newValue) {
                   _enteredName = newValue!;
+                  // Ei tarvita setState
+                  // _enteredQuantity muuttujan arvoa ei näy käyttäjille
                 },
               ),
               Row(
@@ -64,7 +109,7 @@ class _NewItemState extends State<NewItem> {
                       decoration: const InputDecoration(
                         label: Text('Quantity'),
                       ),
-                      initialValue: '1',
+                      initialValue: _enteredQuantity.toString(),
                       validator: (value) {
                         if (value == null ||
                             value.isEmpty ||
@@ -76,7 +121,10 @@ class _NewItemState extends State<NewItem> {
                         return null; // == Ei ole virhettä
                       },
                       onSaved: (newValue) {
-                        _enteredQuantity = newValue!;
+                        // Suoritetaan validator ensin, joten
+                        // value ei voi olla null
+                        _enteredQuantity = int.parse(newValue!);
+
                         // Ei tarvita setState
                         // _enteredQuantity muuttujan arvoa ei näy käyttäjille
                       },
@@ -87,6 +135,7 @@ class _NewItemState extends State<NewItem> {
                   ),
                   Expanded(
                     child: DropdownButtonFormField(
+                      value: _selectedCategory,
                       items: [
                         // For silmukka listan sisällä
                         for (final category in categories.entries)
@@ -107,7 +156,9 @@ class _NewItemState extends State<NewItem> {
                             ),
                           ),
                       ],
-                      onChanged: (value) => {},
+                      onChanged: (data) {
+                        _selectedCategory = data!;
+                      },
                     ),
                   )
                 ],

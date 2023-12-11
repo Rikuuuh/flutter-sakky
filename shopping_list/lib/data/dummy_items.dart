@@ -3,6 +3,7 @@ import 'package:shopping_list/data/categories.dart';
 import 'package:shopping_list/models/category.dart';
 
 // Lisätään models/grocery_item, malli luokka
+// Ei käytössä enää
 final groceryItems = [
   GroceryItem(
       id: 'a',

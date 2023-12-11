@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: const Color.fromARGB(255, 50, 58, 60),
       ),
       // Lisätään widget, jossa on figman kaltainen näkymä "shopping app"-kohdassa
-      home: GroceryList(),
+      home: const GroceryList(),
     );
   }
 }
