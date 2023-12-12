@@ -21,13 +21,16 @@ class _NewItemState extends State<NewItem> {
   // ignore: unused_field
   var _enteredName = '';
   var _enteredQuantity = 1;
-  // ignore: prefer_final_fields
   var _selectedCategory = categories[Categories.vegetables]!;
+  var _isSending = false;
 
   void _saveItem() async {
     // Suoritetaan kaikki validoinnit
     if (_formKey.currentState!.validate() == true) {
       _formKey.currentState!.save();
+      setState(() {
+        _isSending = true;
+      });
       final url = Uri.https(
           'flutter-test-2-e03e7-default-rtdb.europe-west1.firebasedatabase.app',
           'shopping-list.json');
@@ -45,25 +48,23 @@ class _NewItemState extends State<NewItem> {
         ),
       ); //.then((value) => null)
 
-      print(response.statusCode);
-      print(response.body);
+      final Map<String, dynamic> resData = json.decode(response.body);
 
       if (!context.mounted) {
         // Lopetetaan suoritus, jos contextin widget ei ole enää aktiivinen
         return;
       }
-      Navigator.of(context).pop();
 
-      //Navigator.of(context).pop(
-      // Luodaan uusi GroceryItem objekti johon tallennetaan formilta saadut
-      // muuttujat ja viedään pop mukana GroceryList näkymään
-      //GroceryItem(
-      //id: DateTime.now().toString(), // Placeholder id
-      //name: _enteredName,
-      //quantity: _enteredQuantity,
-      //category: _selectedCategory,
-      //),
-      //);
+      Navigator.of(context).pop(
+        // Luodaan uusi GroceryItem objekti johon tallennetaan formilta saadut
+        // muuttujat ja viedään pop mukana GroceryList näkymään
+        GroceryItem(
+          id: resData['name'],
+          name: _enteredName,
+          quantity: _enteredQuantity,
+          category: _selectedCategory,
+        ),
+      );
     }
   }
 
@@ -167,18 +168,26 @@ class _NewItemState extends State<NewItem> {
                 height: 20,
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  TextButton.icon(
-                      onPressed: () {
-                        _formKey.currentState!.reset();
-                      },
-                      icon: const Icon(Icons.restore),
-                      label: const Text('Reset')),
-                  const Spacer(),
-                  ElevatedButton.icon(
-                      onPressed: _saveItem,
-                      icon: const Icon(Icons.add),
-                      label: const Text('Add Item'))
+                  TextButton(
+                    onPressed: _isSending
+                        ? null // null, nappi ei ole enää aktiivinen (UI päivittyy)
+                        : () {
+                            _formKey.currentState!.reset();
+                          },
+                    child: const Text('Reset'),
+                  ),
+                  ElevatedButton(
+                    onPressed: _isSending ? null : _saveItem,
+                    child: _isSending
+                        ? const SizedBox(
+                            height: 16,
+                            width: 16,
+                            child: CircularProgressIndicator(),
+                          )
+                        : const Text('Add Item'),
+                  )
                 ],
               )
             ],
