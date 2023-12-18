@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -16,6 +18,7 @@ class _GroceryListState extends State<GroceryList> {
   // Luodaan state lista
   List<GroceryItem> _groceryItems = [];
   var _isLoading = true;
+  // ignore: avoid_init_to_null
   String? _error = null;
 
   @override
@@ -159,15 +162,16 @@ class _GroceryListState extends State<GroceryList> {
     }
 
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Your Groceries'),
-          actions: [
-            IconButton(
-              onPressed: _addItem,
-              icon: const Icon(Icons.add_circle_outline),
-            )
-          ],
-        ),
-        body: content);
+      appBar: AppBar(
+        title: const Text('Your Groceries'),
+        actions: [
+          IconButton(
+            onPressed: _addItem,
+            icon: const Icon(Icons.add_circle_outline),
+          )
+        ],
+      ),
+      body: content,
+    );
   }
 }
