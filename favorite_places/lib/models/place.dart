@@ -1,4 +1,4 @@
 class Place {
-  Place({required this.property});
-  final String property;
+  Place({required this.title});
+  final String title;
 }

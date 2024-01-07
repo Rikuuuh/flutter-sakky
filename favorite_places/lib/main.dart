@@ -8,7 +8,6 @@ final colorSchema = ColorScheme.fromSeed(
 );
 
 final theme = ThemeData().copyWith(
-  useMaterial3: true,
   scaffoldBackgroundColor: colorSchema.background,
   colorScheme: colorSchema,
   textTheme: GoogleFonts.ubuntuCondensedTextTheme().copyWith(
@@ -28,7 +27,8 @@ final theme = ThemeData().copyWith(
 // Riverpod, jossa dynaaminen Places lista
 // Sivu, joka generoi riverpod datan sisällön
 // Sivu, jossa lisätään objekteja riverpod dataan
-// Klikataan jotain Places objektia, näytetään uusi sivu: places_details == Näytetään titlen tektsti
+// Klikataan jotain Places objektia,
+// näytetään uusi sivu: places_details == Näytetään titlen tektsti
 
 // 1kpl model, 1kpl riverpod provider, 3kpl screen widgets, ? kpl widgetejä
 void main() {
@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'My Places',
       theme: theme,
-      home: ListView.builder(itemBuilder: ),
+      home: ListView.builder(itemBuilder: (context, index) => ,),
     );
   }
 }
