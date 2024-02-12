@@ -1,3 +1,4 @@
+import 'package:chat/screens/chat.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -9,6 +10,7 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
+  final _firebase = FirebaseAuth.instance;
   // Onko kirjautuminen vai rekisteröinti
   var _isLogin = true;
 
@@ -17,7 +19,7 @@ class _AuthScreenState extends State<AuthScreen> {
   var _enteredEmail = '';
   var _enteredPassword = '';
 
-  void _submit() {
+  void _submit() async {
     final isValid = _formKey.currentState!.validate();
 
     if (!isValid) {
@@ -25,12 +27,24 @@ class _AuthScreenState extends State<AuthScreen> {
     }
 
     _formKey.currentState!.save();
-    if (!_isLogin) {
-      FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: _enteredEmail, password: _enteredPassword);
-    } else {
-      FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: _enteredEmail, password: _enteredPassword);
+    try {
+      if (!_isLogin) {
+        // Rekisteröinti
+        final userCredentials = await _firebase.createUserWithEmailAndPassword(
+            email: _enteredEmail, password: _enteredPassword);
+      } else {
+        // Kirjautuminen
+        final userCredentials = await _firebase.signInWithEmailAndPassword(
+            email: _enteredEmail, password: _enteredPassword);
+      }
+    } on FirebaseAuthException catch (error) {
+      // Otetaan vastaan virheilmoitus
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(error.message ?? 'Authentication failed!'),
+        ),
+      );
     }
   }
 
