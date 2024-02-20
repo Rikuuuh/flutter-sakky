@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -28,10 +25,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -49,22 +43,42 @@ class DefaultFirebaseOptions {
     }
   }
 
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyBJC0cTqOGZYf2UO87kcvVUrRFOLbj50FI',
+    appId: '1:294477280641:web:7fb7e9f56c7977582ba480',
+    messagingSenderId: '294477280641',
+    projectId: 'testchat-328e2',
+    authDomain: 'testchat-328e2.firebaseapp.com',
+    databaseURL: 'https://testchat-328e2-default-rtdb.europe-west1.firebasedatabase.app',
+    storageBucket: 'testchat-328e2.appspot.com',
+  );
+
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyD0WfcM-C3QH9VfF4034hKXCdP-R01CkJc',
-    appId: '1:638699514457:android:d438b4e75f6dc2419adf48',
-    messagingSenderId: '638699514457',
-    projectId: 'flutter-test-2-b1504',
-    databaseURL: 'https://flutter-test-2-b1504-default-rtdb.europe-west1.firebasedatabase.app',
-    storageBucket: 'flutter-test-2-b1504.appspot.com',
+    apiKey: 'AIzaSyBkElNjQ0mqjwknICJ7O8SyLKx6TSEvHJ0',
+    appId: '1:294477280641:android:be161b2a52748d552ba480',
+    messagingSenderId: '294477280641',
+    projectId: 'testchat-328e2',
+    databaseURL: 'https://testchat-328e2-default-rtdb.europe-west1.firebasedatabase.app',
+    storageBucket: 'testchat-328e2.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCeYApbMKzKA_LQSJq0PWwwR3uYdbiGjbY',
-    appId: '1:638699514457:ios:ab0f8a858011d35e9adf48',
-    messagingSenderId: '638699514457',
-    projectId: 'flutter-test-2-b1504',
-    databaseURL: 'https://flutter-test-2-b1504-default-rtdb.europe-west1.firebasedatabase.app',
-    storageBucket: 'flutter-test-2-b1504.appspot.com',
+    apiKey: 'AIzaSyA-8lC3FM2yzq5QI4XXDU0TD5TLhRju_pc',
+    appId: '1:294477280641:ios:d181cc00574bdbd82ba480',
+    messagingSenderId: '294477280641',
+    projectId: 'testchat-328e2',
+    databaseURL: 'https://testchat-328e2-default-rtdb.europe-west1.firebasedatabase.app',
+    storageBucket: 'testchat-328e2.appspot.com',
     iosBundleId: 'com.example.chat',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyA-8lC3FM2yzq5QI4XXDU0TD5TLhRju_pc',
+    appId: '1:294477280641:ios:63a7871955a070c42ba480',
+    messagingSenderId: '294477280641',
+    projectId: 'testchat-328e2',
+    databaseURL: 'https://testchat-328e2-default-rtdb.europe-west1.firebasedatabase.app',
+    storageBucket: 'testchat-328e2.appspot.com',
+    iosBundleId: 'com.example.chat.RunnerTests',
   );
 }

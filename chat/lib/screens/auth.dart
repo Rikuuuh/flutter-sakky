@@ -1,7 +1,8 @@
-import 'package:chat/widgets/user_image_picker.dart';
-import 'package:flutter/material.dart';
+// ignore_for_file: use_build_context_synchronously
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:chat/widgets/user_image_picker.dart';
+import 'package:flutter/material.dart';
 
 // Tämän objektin välityksellä käytetään firebase:ia
 final _firebase = FirebaseAuth.instance;
@@ -37,12 +38,14 @@ class _AuthScreenState extends State<AuthScreen> {
         // Rekisteröinti
 
         // Yritetään suorittaa koodi
+        // ignore: unused_local_variable
         final userCredentials = await _firebase.createUserWithEmailAndPassword(
             email: _enteredEmail, password: _enteredPassword);
         //print(userCredentials);
       } else {
         // Kirjautuminen
 
+        // ignore: unused_local_variable
         final userCredentials = await _firebase.signInWithEmailAndPassword(
             email: _enteredEmail, password: _enteredPassword);
         //print(userCredentials);

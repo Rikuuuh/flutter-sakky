@@ -1,12 +1,12 @@
 import 'package:chat/screens/auth.dart';
-import 'package:chat/screens/chat.dart';
-import 'package:chat/screens/rt_test.dart';
+// import 'package:chat/screens/chat.dart';
+import 'package:chat/screens/rt_test2.dart';
 import 'package:chat/screens/splash.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
+import 'package:chat/firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,28 +26,26 @@ class App extends StatelessWidget {
       title: 'Chat',
       theme: ThemeData().copyWith(
         colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color.fromARGB(255, 100, 20, 211),
+          seedColor: const Color.fromARGB(255, 224, 206, 255),
+        ),
+        appBarTheme: const AppBarTheme(
+          color: Color.fromARGB(255, 224, 206, 255),
         ),
       ),
       home: StreamBuilder(
-          stream: FirebaseAuth.instance.authStateChanges(),
-          builder: (ctx, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              // Sovellus on ottanut yhteyden FireBase
-              // ja tarkistaa onko token vielä hyväksyttävä
-              return const SplashScreen();
-            }
-
-            if (snapshot.hasData) {
-              // FireBase lähettää dataa
-              // snapshot muuttujassa on dataa, jos käyttäjä on kirjautunut
-              return const ChatScreen();
-              // return const RtTestScreen();
-            }
-
-            // Oletuksena kirjautumissivu
-            return const AuthScreen();
-          }),
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (ctx, snapshot) {
+          // Lataa ruutu
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const SplashScreen();
+          }
+          if (snapshot.hasData) {
+            // Snapshot muuttujassa on dataa, jos käyttäjä on kirjautunut
+            return const RtTest2Screen();
+          }
+          return const AuthScreen();
+        },
+      ),
     );
   }
 }
