@@ -1,4 +1,6 @@
 import 'package:chat/screens/auth.dart';
+import 'package:chat/screens/chat.dart';
+import 'package:chat/screens/rt_stream.dart';
 // import 'package:chat/screens/chat.dart';
 import 'package:chat/screens/rt_test2.dart';
 import 'package:chat/screens/splash.dart';
@@ -41,7 +43,7 @@ class App extends StatelessWidget {
           }
           if (snapshot.hasData) {
             // Snapshot muuttujassa on dataa, jos käyttäjä on kirjautunut
-            return const RtTest2Screen();
+            return const ChatScreen();
           }
           return const AuthScreen();
         },
